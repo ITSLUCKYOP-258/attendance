@@ -124,8 +124,8 @@ const TIMETABLE_BY_DAY: Record<number, Class[]> = {
 };
 
 export default function Dashboard() {
-  const [currentDate, setCurrentDate] = useState(new Date(2024, 10, 15));
-  const [selectedDate, setSelectedDate] = useState(new Date(2024, 10, 15));
+  const [currentDate, setCurrentDate] = useState(new Date(2024, 11, 1));
+  const [selectedDate, setSelectedDate] = useState(new Date(2024, 11, 1));
   const [holidays, setHolidays] = useState<Set<string>>(new Set());
   const [attendance, setAttendance] = useState<
     Record<string, Record<string, "present" | "absent">>
