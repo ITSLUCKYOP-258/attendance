@@ -757,11 +757,11 @@ export default function Dashboard() {
           </div>
 
           {/* Right: Details & Actions */}
-          <div className="space-y-6">
+          <div className="space-y-4 sm:space-y-6">
             {/* Selected Date Details */}
             <Card className="backdrop-blur-sm bg-white/95 dark:bg-slate-800/95 border-slate-200 dark:border-slate-700">
               <CardHeader>
-                <CardTitle>
+                <CardTitle className="text-lg sm:text-xl">
                   {selectedDate.toLocaleDateString("en-US", {
                     weekday: "long",
                     year: "numeric",
@@ -772,80 +772,86 @@ export default function Dashboard() {
               </CardHeader>
               <CardContent className="space-y-4">
                 {isHoliday ? (
-                  <div className="p-4 bg-warning/10 border border-warning/30 rounded-lg text-center">
-                    <p className="text-sm font-medium text-warning-foreground">
+                  <div className="p-3 sm:p-4 bg-warning/10 border border-warning/30 rounded-lg text-center">
+                    <p className="text-xs sm:text-sm font-medium text-warning-foreground">
                       This is a holiday
                     </p>
                   </div>
                 ) : classesForDate.length > 0 ? (
-                  <div className="space-y-3">
+                  <div className="space-y-2 sm:space-y-3">
                     {mockClasses.map((cls) => (
                       <div
                         key={cls.id}
-                        className="p-3 bg-slate-50 dark:bg-slate-700 rounded-lg space-y-2"
+                        className="p-2 sm:p-3 bg-slate-50 dark:bg-slate-700 rounded-lg space-y-2"
                       >
-                        <p className="font-medium text-slate-900 dark:text-white">
+                        <p className="text-sm sm:text-base font-medium text-slate-900 dark:text-white">
                           {cls.subject}
                         </p>
                         <p className="text-xs text-slate-600 dark:text-slate-400">
                           {cls.time} • {cls.room}
                         </p>
-                        <div className="flex gap-2">
+                        <div className="flex gap-1 sm:gap-2">
                           <button
                             onClick={() =>
                               handleAttendanceChange(cls.id, "present")
                             }
-                            className={`flex-1 py-2 rounded text-sm font-medium flex items-center justify-center gap-2 transition-all ${
+                            className={`flex-1 py-2 sm:py-2.5 rounded text-xs sm:text-sm font-medium flex items-center justify-center gap-1 sm:gap-2 transition-all ${
                               attendance[selectedDateKey]?.[cls.id] ===
                               "present"
                                 ? "bg-success text-white"
                                 : "bg-slate-200 dark:bg-slate-600 text-slate-700 dark:text-slate-300 hover:bg-success/20"
                             }`}
                           >
-                            <Check className="w-4 h-4" />
-                            Present
+                            <Check className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
+                            <span className="hidden sm:inline">Present</span>
+                            <span className="sm:hidden">P</span>
                           </button>
                           <button
                             onClick={() =>
                               handleAttendanceChange(cls.id, "absent")
                             }
-                            className={`flex-1 py-2 rounded text-sm font-medium flex items-center justify-center gap-2 transition-all ${
+                            className={`flex-1 py-2 sm:py-2.5 rounded text-xs sm:text-sm font-medium flex items-center justify-center gap-1 sm:gap-2 transition-all ${
                               attendance[selectedDateKey]?.[cls.id] === "absent"
                                 ? "bg-error text-white"
                                 : "bg-slate-200 dark:bg-slate-600 text-slate-700 dark:text-slate-300 hover:bg-error/20"
                             }`}
                           >
-                            <X className="w-4 h-4" />
-                            Absent
+                            <X className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
+                            <span className="hidden sm:inline">Absent</span>
+                            <span className="sm:hidden">A</span>
                           </button>
                         </div>
                       </div>
                     ))}
                   </div>
                 ) : (
-                  <p className="text-sm text-slate-600 dark:text-slate-400 text-center py-4">
+                  <p className="text-xs sm:text-sm text-slate-600 dark:text-slate-400 text-center py-4">
                     No classes scheduled
                   </p>
                 )}
 
-                <div className="pt-4 border-t border-slate-200 dark:border-slate-700 space-y-2">
+                <div className="pt-3 sm:pt-4 border-t border-slate-200 dark:border-slate-700 space-y-2">
                   {!isHoliday && classesForDate.length > 0 && (
                     <>
                       <Button
                         onClick={() => handleMarkFullDay("present")}
                         variant="outline"
-                        className="w-full text-success border-success hover:bg-success/10"
+                        size="sm"
+                        className="w-full text-success border-success hover:bg-success/10 py-2 sm:py-2.5 text-xs sm:text-sm"
                       >
-                        <Check className="w-4 h-4 mr-2" />
-                        Mark Full Day Present
+                        <Check className="w-3.5 h-3.5 sm:w-4 sm:h-4 mr-1 sm:mr-2" />
+                        <span className="hidden sm:inline">Mark Full Day Present</span>
+                        <span className="sm:hidden">All Present</span>
                       </Button>
                       <Button
                         onClick={() => handleMarkFullDay("absent")}
                         variant="outline"
-                        className="w-full text-error border-error hover:bg-error/10"
+                        size="sm"
+                        className="w-full text-error border-error hover:bg-error/10 py-2 sm:py-2.5 text-xs sm:text-sm"
                       >
-                        <X className="w-4 h-4 mr-2" />
-                        Mark Full Day Absent
+                        <X className="w-3.5 h-3.5 sm:w-4 sm:h-4 mr-1 sm:mr-2" />
+                        <span className="hidden sm:inline">Mark Full Day Absent</span>
+                        <span className="sm:hidden">All Absent</span>
                       </Button>
                     </>
                   )}
@@ -854,7 +860,8 @@ export default function Dashboard() {
                     <Button
                       onClick={handleUnmark}
                       variant="outline"
-                      className="w-full text-slate-600 dark:text-slate-400"
+                      size="sm"
+                      className="w-full text-slate-600 dark:text-slate-400 py-2 sm:py-2.5 text-xs sm:text-sm"
                     >
                       Unmark Attendance
                     </Button>
@@ -863,7 +870,8 @@ export default function Dashboard() {
                   <Button
                     onClick={handleToggleHoliday}
                     variant={isHoliday ? "default" : "outline"}
-                    className={`w-full ${
+                    size="sm"
+                    className={`w-full py-2 sm:py-2.5 text-xs sm:text-sm ${
                       isHoliday
                         ? "bg-warning text-warning-foreground hover:bg-warning/90"
                         : ""
@@ -876,7 +884,7 @@ export default function Dashboard() {
             </Card>
 
             {/* Progress to Target */}
-            <Card className="backdrop-blur-sm bg-white/95 dark:bg-slate-800/95 border-slate-200 dark:border-slate-700">
+            <Card className="backdrop-blur-sm bg-white/95 dark:bg-slate-800/95 border-slate-200 dark:border-slate-700 text-sm sm:text-base">
               <CardHeader>
                 <CardTitle className="flex items-center gap-2">
                   <TrendingUp className="w-5 h-5 text-primary" />
