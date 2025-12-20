@@ -1,3 +1,4 @@
+import { useState, useEffect } from "react";
 import {
   Card,
   CardContent,
@@ -22,7 +23,44 @@ import {
 } from "recharts";
 import { TrendingUp, Calendar, Target, AlertCircle } from "lucide-react";
 
+interface SubjectAttendance {
+  subject: string;
+  percentage: number;
+  total: number;
+  present: number;
+}
+
 export default function Analytics() {
+  const [subjectAttendance, setSubjectAttendance] = useState<
+    SubjectAttendance[]
+  >([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const fetchSubjectWiseAttendance = async () => {
+      try {
+        const userStr = localStorage.getItem("user");
+        if (!userStr) return;
+
+        const user = JSON.parse(userStr);
+        const response = await fetch(
+          `/api/attendance/subject-wise?userEmail=${encodeURIComponent(user.email)}`,
+        );
+        const data = await response.json();
+
+        if (data.success && data.data) {
+          setSubjectAttendance(data.data);
+        }
+      } catch (error) {
+        console.error("Failed to fetch subject-wise attendance:", error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchSubjectWiseAttendance();
+  }, []);
+
   // Mock data for attendance trends
   const attendanceTrendData = [
     { month: "Jan", attendance: 85 },
@@ -38,16 +76,6 @@ export default function Analytics() {
     { name: "Present", value: 78, fill: "#16a34a" },
     { name: "Absent", value: 15, fill: "#dc2626" },
     { name: "Holiday", value: 7, fill: "#eab308" },
-  ];
-
-  // Mock data for subject-wise attendance
-  const subjectAttendance = [
-    { subject: "Data Structures", percentage: 92 },
-    { subject: "Web Dev", percentage: 85 },
-    { subject: "Database", percentage: 78 },
-    { subject: "AI/ML", percentage: 88 },
-    { subject: "Networks", percentage: 75 },
-    { subject: "Security", percentage: 90 },
   ];
 
   // Mock data for weekly breakdown
@@ -67,43 +95,47 @@ export default function Analytics() {
         <div className="absolute bottom-0 left-0 w-96 h-96 bg-cyan-200 dark:bg-cyan-900 rounded-full blur-3xl opacity-10"></div>
       </div>
 
-      <div className="relative max-w-7xl mx-auto p-6">
+      <div className="relative max-w-7xl mx-auto px-4 sm:px-6 py-4 sm:py-6">
         {/* Header */}
-        <div className="mb-8">
-          <div className="flex items-center gap-3 mb-2">
+        <div className="mb-6 sm:mb-8">
+          <div className="flex items-center gap-2 sm:gap-3 mb-2">
             <div className="p-2 bg-primary rounded-lg">
-              <TrendingUp className="w-6 h-6 text-white" />
+              <TrendingUp className="w-5 h-5 sm:w-6 sm:h-6 text-white" />
             </div>
-            <h1 className="text-4xl font-bold text-slate-900 dark:text-white">
+            <h1 className="text-2xl sm:text-4xl font-bold text-slate-900 dark:text-white">
               Analytics & Reports
             </h1>
           </div>
-          <p className="text-slate-600 dark:text-slate-400">
+          <p className="text-xs sm:text-sm text-slate-600 dark:text-slate-400">
             Track your attendance trends and performance metrics
           </p>
         </div>
 
         {/* Key Metrics */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4 mb-6 sm:mb-8">
           <Card className="backdrop-blur-sm bg-white/95 dark:bg-slate-800/95 border-slate-200 dark:border-slate-700">
-            <CardContent className="pt-6">
+            <CardContent className="pt-4 sm:pt-6">
               <div className="space-y-2">
-                <p className="text-sm text-slate-600 dark:text-slate-400">
+                <p className="text-xs sm:text-sm text-slate-600 dark:text-slate-400">
                   Current Percentage
                 </p>
-                <p className="text-3xl font-bold text-primary">87.5%</p>
+                <p className="text-2xl sm:text-3xl font-bold text-primary">
+                  87.5%
+                </p>
                 <p className="text-xs text-success">↑ 2.5% from last month</p>
               </div>
             </CardContent>
           </Card>
 
           <Card className="backdrop-blur-sm bg-white/95 dark:bg-slate-800/95 border-slate-200 dark:border-slate-700">
-            <CardContent className="pt-6">
+            <CardContent className="pt-4 sm:pt-6">
               <div className="space-y-2">
-                <p className="text-sm text-slate-600 dark:text-slate-400">
+                <p className="text-xs sm:text-sm text-slate-600 dark:text-slate-400">
                   Classes Attended
                 </p>
-                <p className="text-3xl font-bold text-success">156</p>
+                <p className="text-2xl sm:text-3xl font-bold text-success">
+                  156
+                </p>
                 <p className="text-xs text-slate-600 dark:text-slate-400">
                   Out of 178 total
                 </p>
@@ -112,12 +144,14 @@ export default function Analytics() {
           </Card>
 
           <Card className="backdrop-blur-sm bg-white/95 dark:bg-slate-800/95 border-slate-200 dark:border-slate-700">
-            <CardContent className="pt-6">
+            <CardContent className="pt-4 sm:pt-6">
               <div className="space-y-2">
-                <p className="text-sm text-slate-600 dark:text-slate-400">
+                <p className="text-xs sm:text-sm text-slate-600 dark:text-slate-400">
                   Target Status
                 </p>
-                <p className="text-3xl font-bold text-success">On Track</p>
+                <p className="text-2xl sm:text-3xl font-bold text-success">
+                  On Track
+                </p>
                 <p className="text-xs text-slate-600 dark:text-slate-400">
                   12.5% above threshold
                 </p>
@@ -126,12 +160,14 @@ export default function Analytics() {
           </Card>
 
           <Card className="backdrop-blur-sm bg-white/95 dark:bg-slate-800/95 border-slate-200 dark:border-slate-700">
-            <CardContent className="pt-6">
+            <CardContent className="pt-4 sm:pt-6">
               <div className="space-y-2">
-                <p className="text-sm text-slate-600 dark:text-slate-400">
+                <p className="text-xs sm:text-sm text-slate-600 dark:text-slate-400">
                   Attendance Streak
                 </p>
-                <p className="text-3xl font-bold text-primary">8 days</p>
+                <p className="text-2xl sm:text-3xl font-bold text-primary">
+                  8 days
+                </p>
                 <p className="text-xs text-slate-600 dark:text-slate-400">
                   Keep it up!
                 </p>
@@ -141,7 +177,7 @@ export default function Analytics() {
         </div>
 
         {/* Charts Grid */}
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-6">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 sm:gap-6 mb-6">
           {/* Attendance Trend */}
           <Card className="backdrop-blur-sm bg-white/95 dark:bg-slate-800/95 border-slate-200 dark:border-slate-700">
             <CardHeader>
@@ -220,47 +256,65 @@ export default function Analytics() {
             </CardDescription>
           </CardHeader>
           <CardContent>
-            <ResponsiveContainer width="100%" height={300}>
-              <BarChart data={subjectAttendance}>
-                <CartesianGrid
-                  strokeDasharray="3 3"
-                  stroke="hsl(var(--border))"
-                />
-                <XAxis
-                  dataKey="subject"
-                  stroke="hsl(var(--muted-foreground))"
-                  angle={-45}
-                  textAnchor="end"
-                  height={100}
-                />
-                <YAxis stroke="hsl(var(--muted-foreground))" />
-                <Tooltip
-                  contentStyle={{
-                    backgroundColor: "hsl(var(--card))",
-                    border: "1px solid hsl(var(--border))",
-                    borderRadius: "8px",
-                  }}
-                />
-                <Bar
-                  dataKey="percentage"
-                  fill="hsl(var(--primary))"
-                  radius={[8, 8, 0, 0]}
-                />
-              </BarChart>
-            </ResponsiveContainer>
+            {loading ? (
+              <div className="h-[300px] flex items-center justify-center">
+                <p className="text-slate-600 dark:text-slate-400">
+                  Loading subject data...
+                </p>
+              </div>
+            ) : subjectAttendance.length > 0 ? (
+              <ResponsiveContainer width="100%" height={250}>
+                <BarChart data={subjectAttendance}>
+                  <CartesianGrid
+                    strokeDasharray="3 3"
+                    stroke="hsl(var(--border))"
+                  />
+                  <XAxis
+                    dataKey="subject"
+                    stroke="hsl(var(--muted-foreground))"
+                    angle={-45}
+                    textAnchor="end"
+                    height={80}
+                    tick={{ fontSize: 12 }}
+                  />
+                  <YAxis stroke="hsl(var(--muted-foreground))" />
+                  <Tooltip
+                    contentStyle={{
+                      backgroundColor: "hsl(var(--card))",
+                      border: "1px solid hsl(var(--border))",
+                      borderRadius: "8px",
+                    }}
+                    formatter={(value) => `${value}%`}
+                  />
+                  <Bar
+                    dataKey="percentage"
+                    fill="hsl(var(--primary))"
+                    radius={[8, 8, 0, 0]}
+                  />
+                </BarChart>
+              </ResponsiveContainer>
+            ) : (
+              <div className="h-[300px] flex items-center justify-center">
+                <p className="text-slate-600 dark:text-slate-400">
+                  No attendance data available yet
+                </p>
+              </div>
+            )}
           </CardContent>
         </Card>
 
         {/* Weekly Breakdown & Insights */}
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 sm:gap-6">
           {/* Weekly Classes */}
           <Card className="backdrop-blur-sm bg-white/95 dark:bg-slate-800/95 border-slate-200 dark:border-slate-700">
             <CardHeader>
-              <CardTitle>Weekly Class Attendance</CardTitle>
-              <CardDescription>Classes attended this month</CardDescription>
+              <CardTitle className="text-lg">Weekly Class Attendance</CardTitle>
+              <CardDescription className="text-xs sm:text-sm">
+                Classes attended this month
+              </CardDescription>
             </CardHeader>
             <CardContent>
-              <ResponsiveContainer width="100%" height={300}>
+              <ResponsiveContainer width="100%" height={250}>
                 <BarChart data={weeklyData}>
                   <CartesianGrid
                     strokeDasharray="3 3"
@@ -329,19 +383,33 @@ export default function Analytics() {
                 </div>
               </div>
 
-              <div className="p-4 bg-warning/10 border border-warning/30 rounded-lg">
-                <div className="flex gap-3">
-                  <AlertCircle className="w-5 h-5 text-warning flex-shrink-0 mt-0.5" />
-                  <div>
-                    <p className="font-semibold text-slate-900 dark:text-white">
-                      Watch Database Systems
-                    </p>
-                    <p className="text-sm text-slate-600 dark:text-slate-400">
-                      Attendance at 78% in this subject
-                    </p>
+              {subjectAttendance.length > 0 &&
+                subjectAttendance.some((s) => s.percentage < 80) && (
+                  <div className="p-4 bg-warning/10 border border-warning/30 rounded-lg">
+                    <div className="flex gap-3">
+                      <AlertCircle className="w-5 h-5 text-warning flex-shrink-0 mt-0.5" />
+                      <div>
+                        <p className="font-semibold text-slate-900 dark:text-white">
+                          Watch{" "}
+                          {
+                            subjectAttendance.filter(
+                              (s) => s.percentage < 80,
+                            )[0]?.subject
+                          }
+                        </p>
+                        <p className="text-sm text-slate-600 dark:text-slate-400">
+                          Attendance at{" "}
+                          {
+                            subjectAttendance.filter(
+                              (s) => s.percentage < 80,
+                            )[0]?.percentage
+                          }
+                          % in this subject
+                        </p>
+                      </div>
+                    </div>
                   </div>
-                </div>
-              </div>
+                )}
 
               <div className="p-4 bg-accent/10 border border-accent/30 rounded-lg">
                 <div className="flex gap-3">

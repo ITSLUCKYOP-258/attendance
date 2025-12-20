@@ -27,8 +27,19 @@ import {
   Calendar,
   TrendingUp,
   AlertCircle,
+  Trash2,
 } from "lucide-react";
 import { Progress } from "@/components/ui/progress";
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogTrigger,
+} from "@/components/ui/alert-dialog";
 
 interface Class {
   id: string;
@@ -149,6 +160,8 @@ export default function Dashboard() {
   const [currentDate, setCurrentDate] = useState(today);
   const [selectedDate, setSelectedDate] = useState(today);
   const [holidays, setHolidays] = useState<Set<string>>(new Set());
+  const [filterStartDate, setFilterStartDate] = useState<string>("");
+  const [filterEndDate, setFilterEndDate] = useState<string>("");
   const [userId] = useState(() => {
     try {
       const user = localStorage.getItem("user");
@@ -176,12 +189,13 @@ export default function Dashboard() {
         const response = await fetch(`/api/attendance/get?userEmail=${userId}`);
         if (response.ok) {
           const result = await response.json();
-          if (result.data && result.data.rows) {
+          const rows = result.data?.rows || result.rows || [];
+          if (rows && rows.length > 0) {
             const attendanceData: Record<
               string,
               Record<string, "present" | "absent">
             > = {};
-            result.data.rows.forEach(
+            rows.forEach(
               (row: { date: string; class_id: string; status: string }) => {
                 if (!attendanceData[row.date]) {
                   attendanceData[row.date] = {};
@@ -191,11 +205,13 @@ export default function Dashboard() {
                   | "absent";
               },
             );
-            setAttendance(attendanceData);
+            // Merge with existing localStorage data instead of replacing
+            setAttendance((prev) => ({ ...prev, ...attendanceData }));
           }
         }
       } catch (error) {
         console.error("Failed to load attendance from database:", error);
+        // Data will remain from localStorage if database fails
       }
     };
 
@@ -283,6 +299,39 @@ export default function Dashboard() {
     };
   }, [attendance]);
 
+  const filteredAttendanceStats = useMemo(() => {
+    if (!filterStartDate || !filterEndDate) {
+      return null;
+    }
+
+    const startDate = new Date(filterStartDate);
+    const endDate = new Date(filterEndDate);
+
+    let present = 0,
+      absent = 0,
+      total = 0;
+
+    Object.entries(attendance).forEach(([dateStr, dateAttendance]) => {
+      const [year, month, day] = dateStr.split("-").map(Number);
+      const recordDate = new Date(year, month - 1, day);
+
+      if (recordDate >= startDate && recordDate <= endDate) {
+        Object.values(dateAttendance).forEach((status) => {
+          if (status === "present") present++;
+          if (status === "absent") absent++;
+          total++;
+        });
+      }
+    });
+
+    return {
+      present,
+      absent,
+      total,
+      percentage: total > 0 ? Math.round((present / total) * 100) : 0,
+    };
+  }, [attendance, filterStartDate, filterEndDate]);
+
   const handleAttendanceChange = async (
     classId: string,
     status: "present" | "absent",
@@ -317,7 +366,7 @@ export default function Dashboard() {
     }
   };
 
-  const handleMarkFullDay = (status: "present" | "absent") => {
+  const handleMarkFullDay = async (status: "present" | "absent") => {
     const newDateAttendance: Record<string, "present" | "absent"> = {};
     mockClasses.forEach((c) => {
       newDateAttendance[c.id] = status;
@@ -326,6 +375,27 @@ export default function Dashboard() {
       ...prev,
       [selectedDateKey]: newDateAttendance,
     }));
+
+    // Save all classes for this day to database
+    for (const classData of mockClasses) {
+      try {
+        await fetch("/api/attendance/save", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            userEmail: userId,
+            date: selectedDateKey,
+            classId: classData.id,
+            subject: classData.subject,
+            timeSlot: classData.time,
+            room: classData.room,
+            status,
+          }),
+        });
+      } catch (error) {
+        console.error("Failed to save attendance:", error);
+      }
+    }
   };
 
   // Show classes only if it's a weekday with scheduled classes and not a holiday
@@ -368,6 +438,46 @@ export default function Dashboard() {
     });
   };
 
+  const handleClearAllData = async () => {
+    try {
+      // Clear from database for all dates
+      for (const [dateKey, dateAttendance] of Object.entries(attendance)) {
+        for (const classId of Object.keys(dateAttendance)) {
+          try {
+            await fetch("/api/attendance/delete", {
+              method: "POST",
+              headers: { "Content-Type": "application/json" },
+              body: JSON.stringify({
+                userEmail: userId,
+                date: dateKey,
+                classId,
+              }),
+            });
+          } catch (error) {
+            console.error("Failed to delete attendance:", error);
+          }
+        }
+      }
+    } catch (error) {
+      console.error("Failed to clear data:", error);
+    }
+
+    // Clear from localStorage and state
+    const storageKey = `attendanceData_${userId}`;
+    localStorage.removeItem(storageKey);
+    setAttendance({});
+  };
+
+  const isFullyAbsent = (date: Date): boolean => {
+    const dKey = dateKey(date);
+    const dayAttendance = attendance[dKey];
+    if (!dayAttendance || Object.keys(dayAttendance).length === 0) {
+      return false;
+    }
+    // Check if all classes are marked as absent
+    return Object.values(dayAttendance).every((status) => status === "absent");
+  };
+
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50 to-slate-100 dark:from-slate-950 dark:via-blue-950 dark:to-slate-900">
       <div className="absolute inset-0 overflow-hidden pointer-events-none">
@@ -375,34 +485,68 @@ export default function Dashboard() {
         <div className="absolute bottom-0 left-0 w-96 h-96 bg-cyan-200 dark:bg-cyan-900 rounded-full blur-3xl opacity-10"></div>
       </div>
 
-      <div className="relative max-w-7xl mx-auto p-6">
+      <div className="relative max-w-7xl mx-auto px-4 sm:px-6 py-4 sm:py-6">
         {/* Header */}
-        <div className="mb-8">
-          <div className="flex items-center gap-3 mb-2">
-            <div className="p-2 bg-primary rounded-lg">
-              <Calendar className="w-6 h-6 text-white" />
+        <div className="mb-6 sm:mb-8">
+          <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-2">
+            <div className="flex items-center gap-3">
+              <div className="p-2 bg-primary rounded-lg">
+                <Calendar className="w-6 h-6 text-white" />
+              </div>
+              <h1 className="text-2xl sm:text-4xl font-bold text-slate-900 dark:text-white">
+                Attendance Dashboard
+              </h1>
             </div>
-            <h1 className="text-4xl font-bold text-slate-900 dark:text-white">
-              Attendance Dashboard
-            </h1>
+            <AlertDialog>
+              <AlertDialogTrigger asChild>
+                <Button
+                  variant="destructive"
+                  size="sm"
+                  className="flex items-center gap-2 w-full sm:w-auto justify-center"
+                >
+                  <Trash2 className="w-4 h-4" />
+                  Clear All Data
+                </Button>
+              </AlertDialogTrigger>
+              <AlertDialogContent>
+                <AlertDialogHeader>
+                  <AlertDialogTitle>
+                    Clear All Attendance Data?
+                  </AlertDialogTitle>
+                  <AlertDialogDescription>
+                    This will permanently delete all your entered attendance
+                    data. This action cannot be undone. Are you sure?
+                  </AlertDialogDescription>
+                </AlertDialogHeader>
+                <div className="flex gap-2 justify-end">
+                  <AlertDialogCancel>Cancel</AlertDialogCancel>
+                  <AlertDialogAction
+                    onClick={handleClearAllData}
+                    className="bg-destructive text-destructive-foreground hover:bg-destructive/90"
+                  >
+                    Clear All
+                  </AlertDialogAction>
+                </div>
+              </AlertDialogContent>
+            </AlertDialog>
           </div>
           <p className="text-slate-600 dark:text-slate-400">
             Track and manage your class attendance
           </p>
         </div>
 
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-4 sm:gap-6">
           {/* Left: Calendar */}
-          <div className="lg:col-span-2 space-y-6">
+          <div className="lg:col-span-2 space-y-4 sm:space-y-6">
             {/* Attendance Stats */}
-            <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+            <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 sm:gap-4">
               <Card className="backdrop-blur-sm bg-white/95 dark:bg-slate-800/95 border-slate-200 dark:border-slate-700">
-                <CardContent className="pt-6">
+                <CardContent className="pt-4 sm:pt-6">
                   <div className="text-center">
-                    <div className="text-3xl font-bold text-primary mb-1">
+                    <div className="text-2xl sm:text-3xl font-bold text-primary mb-1">
                       {attendanceStats.percentage}%
                     </div>
-                    <p className="text-sm text-slate-600 dark:text-slate-400">
+                    <p className="text-xs sm:text-sm text-slate-600 dark:text-slate-400">
                       Overall Attendance
                     </p>
                     {attendanceStats.percentage < 75 && (
@@ -416,12 +560,12 @@ export default function Dashboard() {
               </Card>
 
               <Card className="backdrop-blur-sm bg-white/95 dark:bg-slate-800/95 border-slate-200 dark:border-slate-700">
-                <CardContent className="pt-6">
+                <CardContent className="pt-4 sm:pt-6">
                   <div className="text-center">
-                    <div className="text-3xl font-bold text-success mb-1">
+                    <div className="text-2xl sm:text-3xl font-bold text-success mb-1">
                       {attendanceStats.present}
                     </div>
-                    <p className="text-sm text-slate-600 dark:text-slate-400">
+                    <p className="text-xs sm:text-sm text-slate-600 dark:text-slate-400">
                       Classes Attended
                     </p>
                   </div>
@@ -429,18 +573,100 @@ export default function Dashboard() {
               </Card>
 
               <Card className="backdrop-blur-sm bg-white/95 dark:bg-slate-800/95 border-slate-200 dark:border-slate-700">
-                <CardContent className="pt-6">
+                <CardContent className="pt-4 sm:pt-6">
                   <div className="text-center">
-                    <div className="text-3xl font-bold text-error mb-1">
+                    <div className="text-2xl sm:text-3xl font-bold text-error mb-1">
                       {attendanceStats.absent}
                     </div>
-                    <p className="text-sm text-slate-600 dark:text-slate-400">
+                    <p className="text-xs sm:text-sm text-slate-600 dark:text-slate-400">
                       Classes Missed
                     </p>
                   </div>
                 </CardContent>
               </Card>
             </div>
+
+            {/* Date Range Filter */}
+            <Card className="backdrop-blur-sm bg-white/95 dark:bg-slate-800/95 border-slate-200 dark:border-slate-700">
+              <CardHeader>
+                <CardTitle>Filter by Date Range</CardTitle>
+                <CardDescription>
+                  Select a date range to see attendance for that period
+                </CardDescription>
+              </CardHeader>
+              <CardContent className="space-y-4">
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4">
+                  <div className="space-y-2">
+                    <label className="text-xs sm:text-sm font-medium text-slate-900 dark:text-white">
+                      Start Date
+                    </label>
+                    <input
+                      type="date"
+                      value={filterStartDate}
+                      onChange={(e) => setFilterStartDate(e.target.value)}
+                      className="w-full px-3 py-3 sm:py-2 text-base sm:text-sm border border-slate-300 dark:border-slate-600 rounded-lg bg-white dark:bg-slate-700 text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-primary"
+                    />
+                  </div>
+                  <div className="space-y-2">
+                    <label className="text-xs sm:text-sm font-medium text-slate-900 dark:text-white">
+                      End Date
+                    </label>
+                    <input
+                      type="date"
+                      value={filterEndDate}
+                      onChange={(e) => setFilterEndDate(e.target.value)}
+                      className="w-full px-3 py-3 sm:py-2 text-base sm:text-sm border border-slate-300 dark:border-slate-600 rounded-lg bg-white dark:bg-slate-700 text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-primary"
+                    />
+                  </div>
+                </div>
+
+                {filteredAttendanceStats && (
+                  <div className="mt-6 pt-4 border-t border-slate-200 dark:border-slate-600">
+                    <p className="text-xs sm:text-sm text-slate-600 dark:text-slate-400 mb-4">
+                      Attendance for selected period:
+                    </p>
+                    <div className="grid grid-cols-3 gap-2 sm:gap-3">
+                      <div className="text-center">
+                        <div className="text-xl sm:text-2xl font-bold text-primary mb-1">
+                          {filteredAttendanceStats.percentage}%
+                        </div>
+                        <p className="text-xs text-slate-600 dark:text-slate-400">
+                          Percentage
+                        </p>
+                      </div>
+                      <div className="text-center">
+                        <div className="text-xl sm:text-2xl font-bold text-success mb-1">
+                          {filteredAttendanceStats.present}
+                        </div>
+                        <p className="text-xs text-slate-600 dark:text-slate-400">
+                          Present
+                        </p>
+                      </div>
+                      <div className="text-center">
+                        <div className="text-xl sm:text-2xl font-bold text-error mb-1">
+                          {filteredAttendanceStats.absent}
+                        </div>
+                        <p className="text-xs text-slate-600 dark:text-slate-400">
+                          Absent
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+                )}
+
+                <Button
+                  onClick={() => {
+                    setFilterStartDate("");
+                    setFilterEndDate("");
+                  }}
+                  variant="outline"
+                  size="sm"
+                  className="w-full mt-4 py-2 sm:py-1"
+                >
+                  Clear Filter
+                </Button>
+              </CardContent>
+            </Card>
 
             {/* Calendar */}
             <Card className="backdrop-blur-sm bg-white/95 dark:bg-slate-800/95 border-slate-200 dark:border-slate-700">
@@ -474,7 +700,7 @@ export default function Dashboard() {
                 </div>
               </CardHeader>
               <CardContent>
-                <div className="grid grid-cols-7 gap-2 mb-4">
+                <div className="grid grid-cols-7 gap-1 sm:gap-2 mb-4">
                   {["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"].map(
                     (d) => (
                       <div
@@ -487,7 +713,7 @@ export default function Dashboard() {
                   )}
                 </div>
 
-                <div className="grid grid-cols-7 gap-2">
+                <div className="grid grid-cols-7 gap-1 sm:gap-2">
                   {calendarDays.map((date, i) => {
                     if (date === null) {
                       return (
@@ -501,21 +727,24 @@ export default function Dashboard() {
                     const isHolidayDate = holidays.has(dKey);
                     const dayClasses = getClassesForDate(date);
                     const hasClasses = dayClasses.length > 0;
+                    const fullyAbsent = isFullyAbsent(date);
 
                     return (
                       <button
                         key={`${date.getTime()}`}
                         onClick={() => setSelectedDate(date)}
-                        className={`aspect-square rounded-lg flex items-center justify-center font-medium text-sm transition-all ${
+                        className={`aspect-square rounded-lg flex items-center justify-center font-medium text-xs sm:text-sm transition-all ${
                           isSelected
                             ? "bg-primary text-white ring-2 ring-primary/50"
-                            : isHolidayDate
-                              ? "bg-warning/20 text-warning-foreground border border-warning/30 hover:bg-warning/30"
-                              : hasAttendance
-                                ? "bg-success/20 text-success border border-success/30 hover:bg-success/30"
-                                : hasClasses
-                                  ? "bg-blue-50 dark:bg-blue-900/20 text-blue-700 dark:text-blue-300 border border-blue-200 dark:border-blue-700 hover:bg-blue-100 dark:hover:bg-blue-900/30"
-                                  : "bg-slate-100 dark:bg-slate-700 text-slate-900 dark:text-white hover:bg-slate-200 dark:hover:bg-slate-600"
+                            : fullyAbsent
+                              ? "bg-destructive/20 text-destructive border border-destructive/30 hover:bg-destructive/30"
+                              : isHolidayDate
+                                ? "bg-warning/20 text-warning-foreground border border-warning/30 hover:bg-warning/30"
+                                : hasAttendance
+                                  ? "bg-success/20 text-success border border-success/30 hover:bg-success/30"
+                                  : hasClasses
+                                    ? "bg-blue-50 dark:bg-blue-900/20 text-blue-700 dark:text-blue-300 border border-blue-200 dark:border-blue-700 hover:bg-blue-100 dark:hover:bg-blue-900/30"
+                                    : "bg-slate-100 dark:bg-slate-700 text-slate-900 dark:text-white hover:bg-slate-200 dark:hover:bg-slate-600"
                         }`}
                       >
                         {date.getDate()}
@@ -528,11 +757,11 @@ export default function Dashboard() {
           </div>
 
           {/* Right: Details & Actions */}
-          <div className="space-y-6">
+          <div className="space-y-4 sm:space-y-6">
             {/* Selected Date Details */}
             <Card className="backdrop-blur-sm bg-white/95 dark:bg-slate-800/95 border-slate-200 dark:border-slate-700">
               <CardHeader>
-                <CardTitle>
+                <CardTitle className="text-lg sm:text-xl">
                   {selectedDate.toLocaleDateString("en-US", {
                     weekday: "long",
                     year: "numeric",
@@ -543,80 +772,90 @@ export default function Dashboard() {
               </CardHeader>
               <CardContent className="space-y-4">
                 {isHoliday ? (
-                  <div className="p-4 bg-warning/10 border border-warning/30 rounded-lg text-center">
-                    <p className="text-sm font-medium text-warning-foreground">
+                  <div className="p-3 sm:p-4 bg-warning/10 border border-warning/30 rounded-lg text-center">
+                    <p className="text-xs sm:text-sm font-medium text-warning-foreground">
                       This is a holiday
                     </p>
                   </div>
                 ) : classesForDate.length > 0 ? (
-                  <div className="space-y-3">
+                  <div className="space-y-2 sm:space-y-3">
                     {mockClasses.map((cls) => (
                       <div
                         key={cls.id}
-                        className="p-3 bg-slate-50 dark:bg-slate-700 rounded-lg space-y-2"
+                        className="p-2 sm:p-3 bg-slate-50 dark:bg-slate-700 rounded-lg space-y-2"
                       >
-                        <p className="font-medium text-slate-900 dark:text-white">
+                        <p className="text-sm sm:text-base font-medium text-slate-900 dark:text-white">
                           {cls.subject}
                         </p>
                         <p className="text-xs text-slate-600 dark:text-slate-400">
                           {cls.time} • {cls.room}
                         </p>
-                        <div className="flex gap-2">
+                        <div className="flex gap-1 sm:gap-2">
                           <button
                             onClick={() =>
                               handleAttendanceChange(cls.id, "present")
                             }
-                            className={`flex-1 py-2 rounded text-sm font-medium flex items-center justify-center gap-2 transition-all ${
+                            className={`flex-1 py-2 sm:py-2.5 rounded text-xs sm:text-sm font-medium flex items-center justify-center gap-1 sm:gap-2 transition-all ${
                               attendance[selectedDateKey]?.[cls.id] ===
                               "present"
                                 ? "bg-success text-white"
                                 : "bg-slate-200 dark:bg-slate-600 text-slate-700 dark:text-slate-300 hover:bg-success/20"
                             }`}
                           >
-                            <Check className="w-4 h-4" />
-                            Present
+                            <Check className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
+                            <span className="hidden sm:inline">Present</span>
+                            <span className="sm:hidden">P</span>
                           </button>
                           <button
                             onClick={() =>
                               handleAttendanceChange(cls.id, "absent")
                             }
-                            className={`flex-1 py-2 rounded text-sm font-medium flex items-center justify-center gap-2 transition-all ${
+                            className={`flex-1 py-2 sm:py-2.5 rounded text-xs sm:text-sm font-medium flex items-center justify-center gap-1 sm:gap-2 transition-all ${
                               attendance[selectedDateKey]?.[cls.id] === "absent"
                                 ? "bg-error text-white"
                                 : "bg-slate-200 dark:bg-slate-600 text-slate-700 dark:text-slate-300 hover:bg-error/20"
                             }`}
                           >
-                            <X className="w-4 h-4" />
-                            Absent
+                            <X className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
+                            <span className="hidden sm:inline">Absent</span>
+                            <span className="sm:hidden">A</span>
                           </button>
                         </div>
                       </div>
                     ))}
                   </div>
                 ) : (
-                  <p className="text-sm text-slate-600 dark:text-slate-400 text-center py-4">
+                  <p className="text-xs sm:text-sm text-slate-600 dark:text-slate-400 text-center py-4">
                     No classes scheduled
                   </p>
                 )}
 
-                <div className="pt-4 border-t border-slate-200 dark:border-slate-700 space-y-2">
+                <div className="pt-3 sm:pt-4 border-t border-slate-200 dark:border-slate-700 space-y-2">
                   {!isHoliday && classesForDate.length > 0 && (
                     <>
                       <Button
                         onClick={() => handleMarkFullDay("present")}
                         variant="outline"
-                        className="w-full text-success border-success hover:bg-success/10"
+                        size="sm"
+                        className="w-full text-success border-success hover:bg-success/10 py-2 sm:py-2.5 text-xs sm:text-sm"
                       >
-                        <Check className="w-4 h-4 mr-2" />
-                        Mark Full Day Present
+                        <Check className="w-3.5 h-3.5 sm:w-4 sm:h-4 mr-1 sm:mr-2" />
+                        <span className="hidden sm:inline">
+                          Mark Full Day Present
+                        </span>
+                        <span className="sm:hidden">All Present</span>
                       </Button>
                       <Button
                         onClick={() => handleMarkFullDay("absent")}
                         variant="outline"
-                        className="w-full text-error border-error hover:bg-error/10"
+                        size="sm"
+                        className="w-full text-error border-error hover:bg-error/10 py-2 sm:py-2.5 text-xs sm:text-sm"
                       >
-                        <X className="w-4 h-4 mr-2" />
-                        Mark Full Day Absent
+                        <X className="w-3.5 h-3.5 sm:w-4 sm:h-4 mr-1 sm:mr-2" />
+                        <span className="hidden sm:inline">
+                          Mark Full Day Absent
+                        </span>
+                        <span className="sm:hidden">All Absent</span>
                       </Button>
                     </>
                   )}
@@ -625,7 +864,8 @@ export default function Dashboard() {
                     <Button
                       onClick={handleUnmark}
                       variant="outline"
-                      className="w-full text-slate-600 dark:text-slate-400"
+                      size="sm"
+                      className="w-full text-slate-600 dark:text-slate-400 py-2 sm:py-2.5 text-xs sm:text-sm"
                     >
                       Unmark Attendance
                     </Button>
@@ -634,7 +874,8 @@ export default function Dashboard() {
                   <Button
                     onClick={handleToggleHoliday}
                     variant={isHoliday ? "default" : "outline"}
-                    className={`w-full ${
+                    size="sm"
+                    className={`w-full py-2 sm:py-2.5 text-xs sm:text-sm ${
                       isHoliday
                         ? "bg-warning text-warning-foreground hover:bg-warning/90"
                         : ""
@@ -647,7 +888,7 @@ export default function Dashboard() {
             </Card>
 
             {/* Progress to Target */}
-            <Card className="backdrop-blur-sm bg-white/95 dark:bg-slate-800/95 border-slate-200 dark:border-slate-700">
+            <Card className="backdrop-blur-sm bg-white/95 dark:bg-slate-800/95 border-slate-200 dark:border-slate-700 text-sm sm:text-base">
               <CardHeader>
                 <CardTitle className="flex items-center gap-2">
                   <TrendingUp className="w-5 h-5 text-primary" />
