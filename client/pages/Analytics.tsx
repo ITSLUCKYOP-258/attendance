@@ -248,34 +248,49 @@ export default function Analytics() {
             </CardDescription>
           </CardHeader>
           <CardContent>
-            <ResponsiveContainer width="100%" height={300}>
-              <BarChart data={subjectAttendance}>
-                <CartesianGrid
-                  strokeDasharray="3 3"
-                  stroke="hsl(var(--border))"
-                />
-                <XAxis
-                  dataKey="subject"
-                  stroke="hsl(var(--muted-foreground))"
-                  angle={-45}
-                  textAnchor="end"
-                  height={100}
-                />
-                <YAxis stroke="hsl(var(--muted-foreground))" />
-                <Tooltip
-                  contentStyle={{
-                    backgroundColor: "hsl(var(--card))",
-                    border: "1px solid hsl(var(--border))",
-                    borderRadius: "8px",
-                  }}
-                />
-                <Bar
-                  dataKey="percentage"
-                  fill="hsl(var(--primary))"
-                  radius={[8, 8, 0, 0]}
-                />
-              </BarChart>
-            </ResponsiveContainer>
+            {loading ? (
+              <div className="h-[300px] flex items-center justify-center">
+                <p className="text-slate-600 dark:text-slate-400">
+                  Loading subject data...
+                </p>
+              </div>
+            ) : subjectAttendance.length > 0 ? (
+              <ResponsiveContainer width="100%" height={300}>
+                <BarChart data={subjectAttendance}>
+                  <CartesianGrid
+                    strokeDasharray="3 3"
+                    stroke="hsl(var(--border))"
+                  />
+                  <XAxis
+                    dataKey="subject"
+                    stroke="hsl(var(--muted-foreground))"
+                    angle={-45}
+                    textAnchor="end"
+                    height={100}
+                  />
+                  <YAxis stroke="hsl(var(--muted-foreground))" />
+                  <Tooltip
+                    contentStyle={{
+                      backgroundColor: "hsl(var(--card))",
+                      border: "1px solid hsl(var(--border))",
+                      borderRadius: "8px",
+                    }}
+                    formatter={(value) => `${value}%`}
+                  />
+                  <Bar
+                    dataKey="percentage"
+                    fill="hsl(var(--primary))"
+                    radius={[8, 8, 0, 0]}
+                  />
+                </BarChart>
+              </ResponsiveContainer>
+            ) : (
+              <div className="h-[300px] flex items-center justify-center">
+                <p className="text-slate-600 dark:text-slate-400">
+                  No attendance data available yet
+                </p>
+              </div>
+            )}
           </CardContent>
         </Card>
 
