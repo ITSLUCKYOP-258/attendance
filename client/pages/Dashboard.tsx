@@ -110,7 +110,7 @@ export default function Dashboard() {
 
   const selectedDateKey = dateKey(selectedDate);
   const mockClasses = getClassesForDate(selectedDate);
-  const classesForDate = attendance[selectedDateKey] ? mockClasses : mockClasses;
+  const classesForDate = mockClasses; // Always show the classes for this day of week
 
   const attendanceStats = useMemo(() => {
     let present = 0, absent = 0, total = 0;
