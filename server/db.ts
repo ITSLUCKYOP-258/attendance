@@ -1,26 +1,19 @@
-const NEON_API_URL = process.env.NEON_API_URL || "https://ep-withered-hill-af87v0ho.apirest.c-2.us-west-2.aws.neon.tech/neondb/rest/v1";
+import pg from "pg";
+const { Pool } = pg;
 
-async function neonQuery(sql: string, params: any[] = []) {
+const pool = new Pool({
+  connectionString: process.env.DATABASE_URL,
+  ssl: {
+    rejectUnauthorized: false,
+  },
+});
+
+async function query(sql: string, params: any[] = []) {
   try {
-    const response = await fetch(`${NEON_API_URL}/sql`, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        query: sql,
-        params: params,
-      }),
-    });
-
-    if (!response.ok) {
-      throw new Error(`Neon API error: ${response.statusText}`);
-    }
-
-    const data = await response.json();
-    return data;
+    const result = await pool.query(sql, params);
+    return { rows: result.rows };
   } catch (error) {
-    console.error("Neon query error:", error);
+    console.error("Database query error:", error);
     throw error;
   }
 }
