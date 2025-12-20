@@ -1,16 +1,33 @@
-import { Client } from "pg";
+const NEON_API_URL = process.env.NEON_API_URL || "https://ep-withered-hill-af87v0ho.apirest.c-2.us-west-2.aws.neon.tech/neondb/rest/v1";
 
-const client = new Client({
-  connectionString: process.env.DATABASE_URL,
-  ssl: { rejectUnauthorized: false },
-});
+async function neonQuery(sql: string, params: any[] = []) {
+  try {
+    const response = await fetch(`${NEON_API_URL}/sql`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        query: sql,
+        params: params,
+      }),
+    });
+
+    if (!response.ok) {
+      throw new Error(`Neon API error: ${response.statusText}`);
+    }
+
+    const data = await response.json();
+    return data;
+  } catch (error) {
+    console.error("Neon query error:", error);
+    throw error;
+  }
+}
 
 export async function initializeDatabase() {
   try {
-    await client.connect();
-    console.log("Connected to Neon database");
-
-    await client.query(`
+    await neonQuery(`
       CREATE TABLE IF NOT EXISTS users (
         id SERIAL PRIMARY KEY,
         email VARCHAR(255) UNIQUE NOT NULL,
@@ -22,7 +39,7 @@ export async function initializeDatabase() {
       );
     `);
 
-    await client.query(`
+    await neonQuery(`
       CREATE TABLE IF NOT EXISTS attendance (
         id SERIAL PRIMARY KEY,
         user_email VARCHAR(255) NOT NULL,
@@ -37,21 +54,48 @@ export async function initializeDatabase() {
       );
     `);
 
-    console.log("Database tables initialized");
+    console.log("Database tables initialized successfully");
   } catch (error) {
     console.error("Database initialization error:", error);
-    throw error;
   }
 }
 
-export async function query(text: string, params?: any[]) {
-  try {
-    const result = await client.query(text, params);
-    return result;
-  } catch (error) {
-    console.error("Query error:", error);
-    throw error;
-  }
+export async function saveAttendance(
+  userEmail: string,
+  date: string,
+  classId: string,
+  subject: string,
+  timeSlot: string,
+  room: string,
+  status: string,
+) {
+  return neonQuery(
+    `INSERT INTO attendance (user_email, date, class_id, subject, time_slot, room, status)
+     VALUES ($1, $2, $3, $4, $5, $6, $7)
+     ON CONFLICT (user_email, date, class_id) DO UPDATE SET status = $7, marked_at = CURRENT_TIMESTAMP
+     RETURNING *;`,
+    [userEmail, date, classId, subject, timeSlot, room, status],
+  );
 }
 
-export default client;
+export async function getAttendance(userEmail: string, date?: string) {
+  if (date) {
+    return neonQuery(
+      `SELECT * FROM attendance WHERE user_email = $1 AND date = $2 ORDER BY marked_at DESC;`,
+      [userEmail, date],
+    );
+  }
+  return neonQuery(
+    `SELECT * FROM attendance WHERE user_email = $1 ORDER BY date DESC;`,
+    [userEmail],
+  );
+}
+
+export async function deleteAttendance(userEmail: string, date: string, classId: string) {
+  return neonQuery(
+    `DELETE FROM attendance WHERE user_email = $1 AND date = $2 AND class_id = $3;`,
+    [userEmail, date, classId],
+  );
+}
+
+export default { neonQuery, initializeDatabase, saveAttendance, getAttendance, deleteAttendance };
