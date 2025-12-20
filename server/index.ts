@@ -10,10 +10,12 @@ import {
 } from "./routes/attendance";
 import { initializeDatabase } from "./db";
 
-// Initialize database on startup
-initializeDatabase().catch((error) => {
-  console.error("Failed to initialize database:", error);
-});
+// Initialize database on startup (non-blocking)
+if (process.env.DATABASE_URL) {
+  initializeDatabase().catch((error) => {
+    console.error("Failed to initialize database:", error);
+  });
+}
 
 export function createServer() {
   const app = express();
