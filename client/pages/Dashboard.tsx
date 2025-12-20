@@ -151,23 +151,24 @@ export default function Dashboard() {
   };
 
   const generateCalendarDays = (date: Date): (Date | null)[] => {
-    const start = startOfWeek(startOfMonth(date), { weekStartsOn: 0 });
-    const end = endOfMonth(date);
-    const days = eachDayOfInterval({ start, end: endOfMonth(date) });
+    const monthStart = startOfMonth(date);
+    const monthEnd = endOfMonth(date);
+    const calendarStart = startOfWeek(monthStart, { weekStartsOn: 0 });
 
     const calendarDays: (Date | null)[] = [];
-    let current = start;
+    let current = calendarStart;
 
-    while (current <= endOfMonth(end)) {
+    while (current <= monthEnd || calendarDays.length % 7 !== 0) {
       calendarDays.push(isSameMonth(current, date) ? new Date(current) : null);
-      current = new Date(current.getTime() + 24 * 60 * 60 * 1000);
+      current = addDays(current, 1);
+      if (current > addDays(monthEnd, 6)) break;
     }
 
     return calendarDays;
   };
 
   const dateKey = (date: Date) =>
-    `${date.getFullYear()}-${date.getMonth()}-${date.getDate()}`;
+    `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, "0")}-${String(date.getDate()).padStart(2, "0")}`;
 
   const isHoliday = holidays.has(dateKey(selectedDate));
 
