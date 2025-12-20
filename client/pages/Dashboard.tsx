@@ -433,6 +433,16 @@ export default function Dashboard() {
     setAttendance({});
   };
 
+  const isFullyAbsent = (date: Date): boolean => {
+    const dKey = dateKey(date);
+    const dayAttendance = attendance[dKey];
+    if (!dayAttendance || Object.keys(dayAttendance).length === 0) {
+      return false;
+    }
+    // Check if all classes are marked as absent
+    return Object.values(dayAttendance).every((status) => status === "absent");
+  };
+
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50 to-slate-100 dark:from-slate-950 dark:via-blue-950 dark:to-slate-900">
       <div className="absolute inset-0 overflow-hidden pointer-events-none">
