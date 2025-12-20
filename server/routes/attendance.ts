@@ -79,6 +79,13 @@ export const handleGetAttendance: RequestHandler = async (req, res) => {
 
 export const handleDeleteAttendance: RequestHandler = async (req, res) => {
   try {
+    if (!process.env.DATABASE_URL) {
+      return res.status(503).json({
+        error: "Database service unavailable",
+        details: "DATABASE_URL environment variable is not configured.",
+      });
+    }
+
     const { userEmail, date, classId } = req.body;
 
     if (!userEmail || !date || !classId) {
