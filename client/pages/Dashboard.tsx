@@ -487,13 +487,13 @@ export default function Dashboard() {
 
       <div className="relative max-w-7xl mx-auto p-6">
         {/* Header */}
-        <div className="mb-8">
-          <div className="flex items-center justify-between gap-3 mb-2">
+        <div className="mb-6 sm:mb-8">
+          <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-2">
             <div className="flex items-center gap-3">
               <div className="p-2 bg-primary rounded-lg">
                 <Calendar className="w-6 h-6 text-white" />
               </div>
-              <h1 className="text-4xl font-bold text-slate-900 dark:text-white">
+              <h1 className="text-2xl sm:text-4xl font-bold text-slate-900 dark:text-white">
                 Attendance Dashboard
               </h1>
             </div>
@@ -502,7 +502,7 @@ export default function Dashboard() {
                 <Button
                   variant="destructive"
                   size="sm"
-                  className="flex items-center gap-2"
+                  className="flex items-center gap-2 w-full sm:w-auto justify-center"
                 >
                   <Trash2 className="w-4 h-4" />
                   Clear All Data
@@ -535,18 +535,18 @@ export default function Dashboard() {
           </p>
         </div>
 
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-4 sm:gap-6">
           {/* Left: Calendar */}
-          <div className="lg:col-span-2 space-y-6">
+          <div className="lg:col-span-2 space-y-4 sm:space-y-6">
             {/* Attendance Stats */}
-            <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+            <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 sm:gap-4">
               <Card className="backdrop-blur-sm bg-white/95 dark:bg-slate-800/95 border-slate-200 dark:border-slate-700">
-                <CardContent className="pt-6">
+                <CardContent className="pt-4 sm:pt-6">
                   <div className="text-center">
-                    <div className="text-3xl font-bold text-primary mb-1">
+                    <div className="text-2xl sm:text-3xl font-bold text-primary mb-1">
                       {attendanceStats.percentage}%
                     </div>
-                    <p className="text-sm text-slate-600 dark:text-slate-400">
+                    <p className="text-xs sm:text-sm text-slate-600 dark:text-slate-400">
                       Overall Attendance
                     </p>
                     {attendanceStats.percentage < 75 && (
@@ -560,12 +560,12 @@ export default function Dashboard() {
               </Card>
 
               <Card className="backdrop-blur-sm bg-white/95 dark:bg-slate-800/95 border-slate-200 dark:border-slate-700">
-                <CardContent className="pt-6">
+                <CardContent className="pt-4 sm:pt-6">
                   <div className="text-center">
-                    <div className="text-3xl font-bold text-success mb-1">
+                    <div className="text-2xl sm:text-3xl font-bold text-success mb-1">
                       {attendanceStats.present}
                     </div>
-                    <p className="text-sm text-slate-600 dark:text-slate-400">
+                    <p className="text-xs sm:text-sm text-slate-600 dark:text-slate-400">
                       Classes Attended
                     </p>
                   </div>
@@ -573,12 +573,12 @@ export default function Dashboard() {
               </Card>
 
               <Card className="backdrop-blur-sm bg-white/95 dark:bg-slate-800/95 border-slate-200 dark:border-slate-700">
-                <CardContent className="pt-6">
+                <CardContent className="pt-4 sm:pt-6">
                   <div className="text-center">
-                    <div className="text-3xl font-bold text-error mb-1">
+                    <div className="text-2xl sm:text-3xl font-bold text-error mb-1">
                       {attendanceStats.absent}
                     </div>
-                    <p className="text-sm text-slate-600 dark:text-slate-400">
+                    <p className="text-xs sm:text-sm text-slate-600 dark:text-slate-400">
                       Classes Missed
                     </p>
                   </div>
@@ -595,39 +595,39 @@ export default function Dashboard() {
                 </CardDescription>
               </CardHeader>
               <CardContent className="space-y-4">
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4">
                   <div className="space-y-2">
-                    <label className="text-sm font-medium text-slate-900 dark:text-white">
+                    <label className="text-xs sm:text-sm font-medium text-slate-900 dark:text-white">
                       Start Date
                     </label>
                     <input
                       type="date"
                       value={filterStartDate}
                       onChange={(e) => setFilterStartDate(e.target.value)}
-                      className="w-full px-3 py-2 border border-slate-300 dark:border-slate-600 rounded-lg bg-white dark:bg-slate-700 text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-primary"
+                      className="w-full px-3 py-3 sm:py-2 text-base sm:text-sm border border-slate-300 dark:border-slate-600 rounded-lg bg-white dark:bg-slate-700 text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-primary"
                     />
                   </div>
                   <div className="space-y-2">
-                    <label className="text-sm font-medium text-slate-900 dark:text-white">
+                    <label className="text-xs sm:text-sm font-medium text-slate-900 dark:text-white">
                       End Date
                     </label>
                     <input
                       type="date"
                       value={filterEndDate}
                       onChange={(e) => setFilterEndDate(e.target.value)}
-                      className="w-full px-3 py-2 border border-slate-300 dark:border-slate-600 rounded-lg bg-white dark:bg-slate-700 text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-primary"
+                      className="w-full px-3 py-3 sm:py-2 text-base sm:text-sm border border-slate-300 dark:border-slate-600 rounded-lg bg-white dark:bg-slate-700 text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-primary"
                     />
                   </div>
                 </div>
 
                 {filteredAttendanceStats && (
                   <div className="mt-6 pt-4 border-t border-slate-200 dark:border-slate-600">
-                    <p className="text-sm text-slate-600 dark:text-slate-400 mb-4">
+                    <p className="text-xs sm:text-sm text-slate-600 dark:text-slate-400 mb-4">
                       Attendance for selected period:
                     </p>
-                    <div className="grid grid-cols-3 gap-3">
+                    <div className="grid grid-cols-3 gap-2 sm:gap-3">
                       <div className="text-center">
-                        <div className="text-2xl font-bold text-primary mb-1">
+                        <div className="text-xl sm:text-2xl font-bold text-primary mb-1">
                           {filteredAttendanceStats.percentage}%
                         </div>
                         <p className="text-xs text-slate-600 dark:text-slate-400">
@@ -635,7 +635,7 @@ export default function Dashboard() {
                         </p>
                       </div>
                       <div className="text-center">
-                        <div className="text-2xl font-bold text-success mb-1">
+                        <div className="text-xl sm:text-2xl font-bold text-success mb-1">
                           {filteredAttendanceStats.present}
                         </div>
                         <p className="text-xs text-slate-600 dark:text-slate-400">
@@ -643,7 +643,7 @@ export default function Dashboard() {
                         </p>
                       </div>
                       <div className="text-center">
-                        <div className="text-2xl font-bold text-error mb-1">
+                        <div className="text-xl sm:text-2xl font-bold text-error mb-1">
                           {filteredAttendanceStats.absent}
                         </div>
                         <p className="text-xs text-slate-600 dark:text-slate-400">
@@ -661,7 +661,7 @@ export default function Dashboard() {
                   }}
                   variant="outline"
                   size="sm"
-                  className="w-full mt-4"
+                  className="w-full mt-4 py-2 sm:py-1"
                 >
                   Clear Filter
                 </Button>
@@ -700,7 +700,7 @@ export default function Dashboard() {
                 </div>
               </CardHeader>
               <CardContent>
-                <div className="grid grid-cols-7 gap-2 mb-4">
+                <div className="grid grid-cols-7 gap-1 sm:gap-2 mb-4">
                   {["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"].map(
                     (d) => (
                       <div
@@ -713,7 +713,7 @@ export default function Dashboard() {
                   )}
                 </div>
 
-                <div className="grid grid-cols-7 gap-2">
+                <div className="grid grid-cols-7 gap-1 sm:gap-2">
                   {calendarDays.map((date, i) => {
                     if (date === null) {
                       return (
@@ -733,7 +733,7 @@ export default function Dashboard() {
                       <button
                         key={`${date.getTime()}`}
                         onClick={() => setSelectedDate(date)}
-                        className={`aspect-square rounded-lg flex items-center justify-center font-medium text-sm transition-all ${
+                        className={`aspect-square rounded-lg flex items-center justify-center font-medium text-xs sm:text-sm transition-all ${
                           isSelected
                             ? "bg-primary text-white ring-2 ring-primary/50"
                             : fullyAbsent
