@@ -241,7 +241,7 @@ export default function Dashboard() {
     };
   }, [attendance]);
 
-  const handleAttendanceChange = (
+  const handleAttendanceChange = async (
     classId: string,
     status: "present" | "absent",
   ) => {
@@ -252,6 +252,27 @@ export default function Dashboard() {
         [classId]: status,
       },
     }));
+
+    const selectedClass = mockClasses.find((c) => c.id === classId);
+    if (selectedClass) {
+      try {
+        await fetch("/api/attendance/save", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            userEmail: userId,
+            date: selectedDateKey,
+            classId,
+            subject: selectedClass.subject,
+            timeSlot: selectedClass.time,
+            room: selectedClass.room,
+            status,
+          }),
+        });
+      } catch (error) {
+        console.error("Failed to save attendance:", error);
+      }
+    }
   };
 
   const handleMarkFullDay = (status: "present" | "absent") => {
