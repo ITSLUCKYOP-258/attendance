@@ -1,3 +1,4 @@
+import { useState, useEffect } from "react";
 import {
   Card,
   CardContent,
@@ -22,7 +23,44 @@ import {
 } from "recharts";
 import { TrendingUp, Calendar, Target, AlertCircle } from "lucide-react";
 
+interface SubjectAttendance {
+  subject: string;
+  percentage: number;
+  total: number;
+  present: number;
+}
+
 export default function Analytics() {
+  const [subjectAttendance, setSubjectAttendance] = useState<
+    SubjectAttendance[]
+  >([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const fetchSubjectWiseAttendance = async () => {
+      try {
+        const userStr = localStorage.getItem("user");
+        if (!userStr) return;
+
+        const user = JSON.parse(userStr);
+        const response = await fetch(
+          `/api/attendance/subject-wise?userEmail=${encodeURIComponent(user.email)}`,
+        );
+        const data = await response.json();
+
+        if (data.success && data.data) {
+          setSubjectAttendance(data.data);
+        }
+      } catch (error) {
+        console.error("Failed to fetch subject-wise attendance:", error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchSubjectWiseAttendance();
+  }, []);
+
   // Mock data for attendance trends
   const attendanceTrendData = [
     { month: "Jan", attendance: 85 },
@@ -38,16 +76,6 @@ export default function Analytics() {
     { name: "Present", value: 78, fill: "#16a34a" },
     { name: "Absent", value: 15, fill: "#dc2626" },
     { name: "Holiday", value: 7, fill: "#eab308" },
-  ];
-
-  // Mock data for subject-wise attendance
-  const subjectAttendance = [
-    { subject: "Data Structures", percentage: 92 },
-    { subject: "Web Dev", percentage: 85 },
-    { subject: "Database", percentage: 78 },
-    { subject: "AI/ML", percentage: 88 },
-    { subject: "Networks", percentage: 75 },
-    { subject: "Security", percentage: 90 },
   ];
 
   // Mock data for weekly breakdown
