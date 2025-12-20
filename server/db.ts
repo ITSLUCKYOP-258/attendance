@@ -20,7 +20,7 @@ async function query(sql: string, params: any[] = []) {
 
 export async function initializeDatabase() {
   try {
-    await neonQuery(`
+    await query(`
       CREATE TABLE IF NOT EXISTS users (
         id SERIAL PRIMARY KEY,
         email VARCHAR(255) UNIQUE NOT NULL,
@@ -32,7 +32,7 @@ export async function initializeDatabase() {
       );
     `);
 
-    await neonQuery(`
+    await query(`
       CREATE TABLE IF NOT EXISTS attendance (
         id SERIAL PRIMARY KEY,
         user_email VARCHAR(255) NOT NULL,
@@ -62,7 +62,7 @@ export async function saveAttendance(
   room: string,
   status: string,
 ) {
-  return neonQuery(
+  return query(
     `INSERT INTO attendance (user_email, date, class_id, subject, time_slot, room, status)
      VALUES ($1, $2, $3, $4, $5, $6, $7)
      ON CONFLICT (user_email, date, class_id) DO UPDATE SET status = $7, marked_at = CURRENT_TIMESTAMP
@@ -73,22 +73,22 @@ export async function saveAttendance(
 
 export async function getAttendance(userEmail: string, date?: string) {
   if (date) {
-    return neonQuery(
+    return query(
       `SELECT * FROM attendance WHERE user_email = $1 AND date = $2 ORDER BY marked_at DESC;`,
       [userEmail, date],
     );
   }
-  return neonQuery(
+  return query(
     `SELECT * FROM attendance WHERE user_email = $1 ORDER BY date DESC;`,
     [userEmail],
   );
 }
 
 export async function deleteAttendance(userEmail: string, date: string, classId: string) {
-  return neonQuery(
+  return query(
     `DELETE FROM attendance WHERE user_email = $1 AND date = $2 AND class_id = $3;`,
     [userEmail, date, classId],
   );
 }
 
-export default { neonQuery, initializeDatabase, saveAttendance, getAttendance, deleteAttendance };
+export default { query, initializeDatabase, saveAttendance, getAttendance, deleteAttendance };
