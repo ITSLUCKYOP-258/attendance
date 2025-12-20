@@ -332,7 +332,26 @@ export default function Dashboard() {
     setHolidays(newHolidays);
   };
 
-  const handleUnmark = () => {
+  const handleUnmark = async () => {
+    const attendanceForDay = attendance[selectedDateKey];
+    if (attendanceForDay) {
+      for (const classId of Object.keys(attendanceForDay)) {
+        try {
+          await fetch("/api/attendance/delete", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({
+              userEmail: userId,
+              date: selectedDateKey,
+              classId,
+            }),
+          });
+        } catch (error) {
+          console.error("Failed to delete attendance:", error);
+        }
+      }
+    }
+
     setAttendance((prev) => {
       const newAttendance = { ...prev };
       delete newAttendance[selectedDateKey];
