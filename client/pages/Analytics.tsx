@@ -255,7 +255,7 @@ export default function Analytics() {
                 </p>
               </div>
             ) : subjectAttendance.length > 0 ? (
-              <ResponsiveContainer width="100%" height={300}>
+              <ResponsiveContainer width="100%" height={250}>
                 <BarChart data={subjectAttendance}>
                   <CartesianGrid
                     strokeDasharray="3 3"
@@ -266,7 +266,8 @@ export default function Analytics() {
                     stroke="hsl(var(--muted-foreground))"
                     angle={-45}
                     textAnchor="end"
-                    height={100}
+                    height={80}
+                    tick={{ fontSize: 12 }}
                   />
                   <YAxis stroke="hsl(var(--muted-foreground))" />
                   <Tooltip
