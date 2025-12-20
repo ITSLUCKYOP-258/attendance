@@ -140,7 +140,22 @@ export default function Dashboard() {
   const [holidays, setHolidays] = useState<Set<string>>(new Set());
   const [attendance, setAttendance] = useState<
     Record<string, Record<string, "present" | "absent">>
-  >({});
+  >(() => {
+    try {
+      const saved = localStorage.getItem("attendanceData");
+      return saved ? JSON.parse(saved) : {};
+    } catch {
+      return {};
+    }
+  });
+
+  useEffect(() => {
+    try {
+      localStorage.setItem("attendanceData", JSON.stringify(attendance));
+    } catch {
+      console.error("Failed to save attendance data");
+    }
+  }, [attendance]);
 
   const handlePreviousMonth = () => {
     setCurrentDate(subMonths(currentDate, 1));
