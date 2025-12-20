@@ -6,6 +6,7 @@ import {
   handleSaveAttendance,
   handleGetAttendance,
   handleDeleteAttendance,
+  handleGetSubjectWiseAttendance,
 } from "./routes/attendance";
 import { initializeDatabase } from "./db";
 
