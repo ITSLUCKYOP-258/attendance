@@ -142,22 +142,28 @@ export default function Dashboard() {
     Record<string, Record<string, "present" | "absent">>
   >({});
 
-  const getDaysInMonth = (date: Date) =>
-    new Date(date.getFullYear(), date.getMonth() + 1, 0).getDate();
-
-  const getFirstDayOfMonth = (date: Date) =>
-    new Date(date.getFullYear(), date.getMonth(), 1).getDay();
-
   const handlePreviousMonth = () => {
-    setCurrentDate(
-      new Date(currentDate.getFullYear(), currentDate.getMonth() - 1),
-    );
+    setCurrentDate(subMonths(currentDate, 1));
   };
 
   const handleNextMonth = () => {
-    setCurrentDate(
-      new Date(currentDate.getFullYear(), currentDate.getMonth() + 1),
-    );
+    setCurrentDate(addMonths(currentDate, 1));
+  };
+
+  const generateCalendarDays = (date: Date): (Date | null)[] => {
+    const start = startOfWeek(startOfMonth(date), { weekStartsOn: 0 });
+    const end = endOfMonth(date);
+    const days = eachDayOfInterval({ start, end: endOfMonth(date) });
+
+    const calendarDays: (Date | null)[] = [];
+    let current = start;
+
+    while (current <= endOfMonth(end)) {
+      calendarDays.push(isSameMonth(current, date) ? new Date(current) : null);
+      current = new Date(current.getTime() + 24 * 60 * 60 * 1000);
+    }
+
+    return calendarDays;
   };
 
   const dateKey = (date: Date) =>
