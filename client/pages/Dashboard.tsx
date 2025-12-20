@@ -369,21 +369,15 @@ export default function Dashboard() {
                 </div>
 
                 <div className="grid grid-cols-7 gap-2">
-                  {days.map((day, i) => {
-                    if (day === null) {
+                  {calendarDays.map((date, i) => {
+                    if (date === null) {
                       return (
                         <div key={`empty-${i}`} className="aspect-square"></div>
                       );
                     }
 
-                    const date = new Date(
-                      currentDate.getFullYear(),
-                      currentDate.getMonth(),
-                      day,
-                    );
                     const dKey = dateKey(date);
-                    const isSelected =
-                      selectedDate.toDateString() === date.toDateString();
+                    const isSelected = isSameDay(selectedDate, date);
                     const hasAttendance = !!attendance[dKey];
                     const isHolidayDate = holidays.has(dKey);
                     const dayClasses = getClassesForDate(date);
@@ -391,7 +385,7 @@ export default function Dashboard() {
 
                     return (
                       <button
-                        key={day}
+                        key={`${date.getTime()}`}
                         onClick={() => setSelectedDate(date)}
                         className={`aspect-square rounded-lg flex items-center justify-center font-medium text-sm transition-all ${
                           isSelected
@@ -405,7 +399,7 @@ export default function Dashboard() {
                                   : "bg-slate-100 dark:bg-slate-700 text-slate-900 dark:text-white hover:bg-slate-200 dark:hover:bg-slate-600"
                         }`}
                       >
-                        {day}
+                        {date.getDate()}
                       </button>
                     );
                   })}
