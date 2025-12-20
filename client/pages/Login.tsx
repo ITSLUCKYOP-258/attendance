@@ -119,7 +119,6 @@ export default function Login() {
                 Sign up here
               </Link>
             </div>
-
           </CardContent>
         </Card>
       </div>

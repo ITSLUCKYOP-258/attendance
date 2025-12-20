@@ -19,6 +19,7 @@ This application is configured and ready for production deployment on Netlify.
 5. Click "Deploy"
 
 Netlify will automatically:
+
 - Detect the `netlify.toml` configuration
 - Set the build command to `pnpm run build`
 - Deploy the frontend to `dist/spa`
@@ -34,11 +35,13 @@ To enable persistent attendance data storage with a PostgreSQL database:
    - **Value**: Your PostgreSQL connection string
 
 For example, if using **Neon**:
+
 ```
 postgresql://user:password@host.neon.tech/dbname?sslmode=require
 ```
 
 Or **Supabase**:
+
 ```
 postgresql://user.email@supabase.co:password@db.supabase.co:5432/postgres
 ```
@@ -46,6 +49,7 @@ postgresql://user.email@supabase.co:password@db.supabase.co:5432/postgres
 ### Step 3: Deploy
 
 Once you push changes to your repository, Netlify will automatically:
+
 1. Build the frontend React app
 2. Bundle the backend Express server for serverless functions
 3. Deploy everything to a production URL
@@ -67,18 +71,23 @@ Once you push changes to your repository, Netlify will automatically:
 ## Database
 
 ### Without Database (Default)
+
 The app works perfectly without a database:
+
 - Attendance data stored in browser's localStorage
 - Data persists per browser session
 - Perfect for demo/testing
 
 ### With Database (Optional)
+
 Connect a PostgreSQL database for:
+
 - Data persistence across sessions
 - Multi-user support
 - Data synchronization
 
 **Recommended providers**:
+
 - [Neon](https://neon.tech) - Serverless Postgres
 - [Supabase](https://supabase.com) - Postgres + Auth + APIs
 - [AWS RDS](https://aws.amazon.com/rds/) - Managed Postgres
@@ -86,6 +95,7 @@ Connect a PostgreSQL database for:
 ## Monitoring
 
 View logs and monitor your site:
+
 1. Go to your site in Netlify dashboard
 2. Click "Deploys" to see build logs
 3. Click "Functions" to monitor API calls
@@ -94,16 +104,19 @@ View logs and monitor your site:
 ## Troubleshooting
 
 ### Build Fails
+
 - Check build logs in Netlify dashboard
 - Ensure all dependencies are installed locally: `pnpm install`
 - Run local build test: `pnpm run build`
 
 ### API Endpoints Not Working
+
 - Check that database is configured if needed
 - Review function logs in Netlify dashboard
 - Ensure `/api/*` routes match your backend endpoints
 
 ### Attendance Data Not Saving
+
 - If using database: verify DATABASE_URL is set correctly
 - Check browser console for API errors
 - Without database: data is stored in localStorage (browser-specific)

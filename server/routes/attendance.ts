@@ -6,7 +6,8 @@ export const handleSaveAttendance: RequestHandler = async (req, res) => {
     if (!process.env.DATABASE_URL) {
       return res.status(503).json({
         error: "Database service unavailable",
-        details: "DATABASE_URL environment variable is not configured. Please configure it in your Netlify environment variables.",
+        details:
+          "DATABASE_URL environment variable is not configured. Please configure it in your Netlify environment variables.",
       });
     }
 
