@@ -176,12 +176,13 @@ export default function Dashboard() {
         const response = await fetch(`/api/attendance/get?userEmail=${userId}`);
         if (response.ok) {
           const result = await response.json();
-          if (result.data && result.data.rows) {
+          const rows = result.data?.rows || result.rows || [];
+          if (rows && rows.length > 0) {
             const attendanceData: Record<
               string,
               Record<string, "present" | "absent">
             > = {};
-            result.data.rows.forEach(
+            rows.forEach(
               (row: { date: string; class_id: string; status: string }) => {
                 if (!attendanceData[row.date]) {
                   attendanceData[row.date] = {};
