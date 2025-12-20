@@ -296,7 +296,7 @@ export default function Analytics() {
         </Card>
 
         {/* Weekly Breakdown & Insights */}
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 sm:gap-6">
           {/* Weekly Classes */}
           <Card className="backdrop-blur-sm bg-white/95 dark:bg-slate-800/95 border-slate-200 dark:border-slate-700">
             <CardHeader>
