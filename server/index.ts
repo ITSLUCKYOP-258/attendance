@@ -35,6 +35,7 @@ export function createServer() {
   app.post("/api/attendance/save", handleSaveAttendance);
   app.get("/api/attendance/get", handleGetAttendance);
   app.post("/api/attendance/delete", handleDeleteAttendance);
+  app.get("/api/attendance/subject-wise", handleGetSubjectWiseAttendance);
 
   return app;
 }
