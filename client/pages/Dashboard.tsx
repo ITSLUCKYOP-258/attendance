@@ -160,6 +160,8 @@ export default function Dashboard() {
   const [currentDate, setCurrentDate] = useState(today);
   const [selectedDate, setSelectedDate] = useState(today);
   const [holidays, setHolidays] = useState<Set<string>>(new Set());
+  const [filterStartDate, setFilterStartDate] = useState<string>("");
+  const [filterEndDate, setFilterEndDate] = useState<string>("");
   const [userId] = useState(() => {
     try {
       const user = localStorage.getItem("user");
