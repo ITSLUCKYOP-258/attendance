@@ -86,3 +86,62 @@ export const handleDeleteAttendance: RequestHandler = async (req, res) => {
     });
   }
 };
+
+export const handleGetSubjectWiseAttendance: RequestHandler = async (
+  req,
+  res,
+) => {
+  try {
+    const { userEmail } = req.query;
+
+    if (!userEmail || typeof userEmail !== "string") {
+      return res.status(400).json({
+        error: "Missing required parameter: userEmail",
+      });
+    }
+
+    const result = await getAttendance(userEmail);
+    const records = result.rows as Array<{
+      subject: string;
+      status: string;
+    }>;
+
+    // Calculate subject-wise attendance statistics
+    const subjectStats: Record<
+      string,
+      { total: number; present: number; percentage: number }
+    > = {};
+
+    for (const record of records) {
+      const subject = record.subject || "Unknown";
+      if (!subjectStats[subject]) {
+        subjectStats[subject] = { total: 0, present: 0, percentage: 0 };
+      }
+      subjectStats[subject].total += 1;
+      if (record.status === "present") {
+        subjectStats[subject].present += 1;
+      }
+    }
+
+    // Calculate percentages
+    const subjectAttendance = Object.entries(subjectStats)
+      .map(([subject, stats]) => ({
+        subject,
+        percentage: stats.total > 0 ? Math.round((stats.present / stats.total) * 100) : 0,
+        total: stats.total,
+        present: stats.present,
+      }))
+      .sort((a, b) => b.percentage - a.percentage);
+
+    res.json({
+      success: true,
+      data: subjectAttendance,
+    });
+  } catch (error) {
+    console.error("Get subject-wise attendance error:", error);
+    res.status(500).json({
+      error: "Failed to retrieve subject-wise attendance",
+      details: error instanceof Error ? error.message : "Unknown error",
+    });
+  }
+};
