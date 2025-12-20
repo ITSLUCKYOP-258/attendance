@@ -23,6 +23,55 @@ const MONTHS = [
   "July", "August", "September", "October", "November", "December"
 ];
 
+// Timetable data based on the provided schedule (MON-SAT)
+const TIMETABLE_BY_DAY: Record<number, Class[]> = {
+  1: [ // Monday
+    { id: "1", subject: "ICS", time: "10:30-11:20", room: "AS" },
+    { id: "2", subject: "BEE", time: "11:20-12:10", room: "PM" },
+    { id: "3", subject: "LPCC", time: "12:10-01:00", room: "RM" },
+    { id: "4", subject: "FC", time: "01:50-02:40", room: "GB" },
+    { id: "5", subject: "EM-I", time: "02:40-03:30", room: "DKY" },
+    { id: "6", subject: "ES", time: "03:30-04:20", room: "RS" },
+  ],
+  2: [ // Tuesday
+    { id: "7", subject: "BEE LAB / LPCC LAB", time: "10:30-11:20", room: "BATCH" },
+    { id: "8", subject: "PCS", time: "11:20-12:10", room: "AS" },
+    { id: "9", subject: "FC", time: "01:50-02:40", room: "GB" },
+    { id: "10", subject: "ES", time: "03:30-04:20", room: "RS" },
+    { id: "11", subject: "IKS", time: "04:20-05:10", room: "AS" },
+  ],
+  3: [ // Wednesday
+    { id: "12", subject: "FC", time: "10:30-11:20", room: "GB" },
+    { id: "13", subject: "BEE", time: "11:20-12:10", room: "PM" },
+    { id: "14", subject: "EM-I", time: "12:10-01:00", room: "DKY" },
+    { id: "15", subject: "LPCC", time: "01:50-02:40", room: "RM" },
+    { id: "16", subject: "PCS", time: "02:40-03:30", room: "AS" },
+    { id: "17", subject: "EM-I", time: "03:30-04:20", room: "DKY" },
+    { id: "18", subject: "ES", time: "04:20-05:10", room: "RS" },
+  ],
+  4: [ // Thursday
+    { id: "19", subject: "ES", time: "10:30-11:20", room: "RS" },
+    { id: "20", subject: "BEE", time: "11:20-12:10", room: "PM" },
+    { id: "21", subject: "PCS", time: "12:10-01:00", room: "AS" },
+    { id: "22", subject: "EM-I", time: "01:50-02:40", room: "DKY" },
+    { id: "23", subject: "LPCC", time: "02:40-03:30", room: "RM" },
+    { id: "24", subject: "ES", time: "03:30-04:20", room: "RS" },
+  ],
+  5: [ // Friday
+    { id: "25", subject: "IKS", time: "10:30-11:20", room: "AS" },
+    { id: "26", subject: "BEE", time: "11:20-12:10", room: "PM" },
+    { id: "27", subject: "FC", time: "12:10-01:00", room: "GB" },
+    { id: "28", subject: "Value Education", time: "04:20-05:10", room: "Auditorium" },
+  ],
+  6: [ // Saturday
+    { id: "29", subject: "EM-I", time: "10:30-11:20", room: "DKY" },
+    { id: "30", subject: "BEE", time: "11:20-12:10", room: "PM" },
+    { id: "31", subject: "LPCC", time: "12:10-01:00", room: "RM" },
+    { id: "32", subject: "FC", time: "01:50-02:40", room: "GB" },
+    { id: "33", subject: "E-Lab Activity", time: "02:40-04:20", room: "Sports/Yoga/Services" },
+  ],
+};
+
 export default function Dashboard() {
   const [currentDate, setCurrentDate] = useState(new Date(2024, 10, 15));
   const [selectedDate, setSelectedDate] = useState(new Date(2024, 10, 15));
@@ -51,14 +100,17 @@ export default function Dashboard() {
   for (let i = 0; i < firstDay; i++) days.push(null);
   for (let i = 1; i <= daysInMonth; i++) days.push(i);
 
-  const mockClasses: Class[] = [
-    { id: "1", subject: "Data Structures", time: "09:00 AM", room: "A-101", attendance: null },
-    { id: "2", subject: "Web Development", time: "11:00 AM", room: "B-205", attendance: null },
-    { id: "3", subject: "Database Systems", time: "02:00 PM", room: "C-302", attendance: null },
-  ];
+  // Get classes for selected date based on day of week
+  const getClassesForDate = (date: Date): Class[] => {
+    const dayOfWeek = date.getDay(); // 0=Sunday, 1=Monday, ..., 6=Saturday
+    // Sunday (0) has no classes, so return empty
+    if (dayOfWeek === 0) return [];
+    return TIMETABLE_BY_DAY[dayOfWeek] || [];
+  };
 
   const selectedDateKey = dateKey(selectedDate);
-  const classesForDate = attendance[selectedDateKey] ? mockClasses : [];
+  const mockClasses = getClassesForDate(selectedDate);
+  const classesForDate = attendance[selectedDateKey] ? mockClasses : mockClasses;
 
   const attendanceStats = useMemo(() => {
     let present = 0, absent = 0, total = 0;
