@@ -138,11 +138,21 @@ export default function Dashboard() {
   const [currentDate, setCurrentDate] = useState(new Date(2025, 11, 1));
   const [selectedDate, setSelectedDate] = useState(new Date(2025, 11, 1));
   const [holidays, setHolidays] = useState<Set<string>>(new Set());
+  const [userId] = useState(() => {
+    try {
+      const user = localStorage.getItem("user");
+      return user ? JSON.parse(user).email : "guest";
+    } catch {
+      return "guest";
+    }
+  });
+
   const [attendance, setAttendance] = useState<
     Record<string, Record<string, "present" | "absent">>
   >(() => {
     try {
-      const saved = localStorage.getItem("attendanceData");
+      const storageKey = `attendanceData_${userId}`;
+      const saved = localStorage.getItem(storageKey);
       return saved ? JSON.parse(saved) : {};
     } catch {
       return {};
@@ -151,11 +161,12 @@ export default function Dashboard() {
 
   useEffect(() => {
     try {
-      localStorage.setItem("attendanceData", JSON.stringify(attendance));
+      const storageKey = `attendanceData_${userId}`;
+      localStorage.setItem(storageKey, JSON.stringify(attendance));
     } catch {
       console.error("Failed to save attendance data");
     }
-  }, [attendance]);
+  }, [attendance, userId]);
 
   const handlePreviousMonth = () => {
     setCurrentDate(subMonths(currentDate, 1));
