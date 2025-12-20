@@ -2,7 +2,13 @@ import { useState } from "react";
 import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
 import { Calendar, ArrowRight } from "lucide-react";
 
 export default function Login() {
@@ -33,20 +39,28 @@ export default function Login() {
             <div className="p-2 bg-primary rounded-lg">
               <Calendar className="w-6 h-6 text-white" />
             </div>
-            <h1 className="text-3xl font-bold text-slate-900 dark:text-white">AttendHub</h1>
+            <h1 className="text-3xl font-bold text-slate-900 dark:text-white">
+              AttendHub
+            </h1>
           </div>
-          <p className="text-slate-600 dark:text-slate-400">Smart Attendance Management System</p>
+          <p className="text-slate-600 dark:text-slate-400">
+            Smart Attendance Management System
+          </p>
         </div>
 
         <Card className="backdrop-blur-sm bg-white/95 dark:bg-slate-800/95 border-slate-200 dark:border-slate-700 shadow-xl">
           <CardHeader>
             <CardTitle>Welcome Back</CardTitle>
-            <CardDescription>Sign in to your account to manage attendance</CardDescription>
+            <CardDescription>
+              Sign in to your account to manage attendance
+            </CardDescription>
           </CardHeader>
           <CardContent>
             <form onSubmit={handleLogin} className="space-y-4">
               <div className="space-y-2">
-                <label className="text-sm font-medium text-slate-700 dark:text-slate-300">Email Address</label>
+                <label className="text-sm font-medium text-slate-700 dark:text-slate-300">
+                  Email Address
+                </label>
                 <Input
                   type="email"
                   placeholder="student@university.edu"
@@ -58,7 +72,9 @@ export default function Login() {
               </div>
 
               <div className="space-y-2">
-                <label className="text-sm font-medium text-slate-700 dark:text-slate-300">Password</label>
+                <label className="text-sm font-medium text-slate-700 dark:text-slate-300">
+                  Password
+                </label>
                 <Input
                   type="password"
                   placeholder="Enter your password"
@@ -72,9 +88,14 @@ export default function Login() {
               <div className="flex items-center justify-between text-sm">
                 <label className="flex items-center gap-2 cursor-pointer">
                   <input type="checkbox" className="w-4 h-4 rounded" />
-                  <span className="text-slate-600 dark:text-slate-400">Remember me</span>
+                  <span className="text-slate-600 dark:text-slate-400">
+                    Remember me
+                  </span>
                 </label>
-                <a href="#" className="text-primary hover:text-primary-dark font-medium">
+                <a
+                  href="#"
+                  className="text-primary hover:text-primary-dark font-medium"
+                >
                   Forgot password?
                 </a>
               </div>
@@ -91,7 +112,10 @@ export default function Login() {
 
             <div className="mt-6 pt-6 border-t border-slate-200 dark:border-slate-700 text-center text-sm text-slate-600 dark:text-slate-400">
               Don't have an account?{" "}
-              <Link to="/register" className="text-primary hover:text-primary-dark font-medium">
+              <Link
+                to="/register"
+                className="text-primary hover:text-primary-dark font-medium"
+              >
                 Sign up here
               </Link>
             </div>

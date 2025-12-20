@@ -2,7 +2,16 @@ import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
-import { Calendar, BarChart3, Users, Lock, Clock, TrendingUp, ArrowRight, CheckCircle } from "lucide-react";
+import {
+  Calendar,
+  BarChart3,
+  Users,
+  Lock,
+  Clock,
+  TrendingUp,
+  ArrowRight,
+  CheckCircle,
+} from "lucide-react";
 
 export default function Index() {
   const navigate = useNavigate();
@@ -24,12 +33,14 @@ export default function Index() {
     {
       icon: BarChart3,
       title: "Real-Time Analytics",
-      description: "Track attendance trends with interactive charts and visualizations",
+      description:
+        "Track attendance trends with interactive charts and visualizations",
     },
     {
       icon: Clock,
       title: "Timetable Integration",
-      description: "Auto-populated class schedules from your institution's timetable",
+      description:
+        "Auto-populated class schedules from your institution's timetable",
     },
     {
       icon: TrendingUp,
@@ -63,15 +74,26 @@ export default function Index() {
               <Calendar className="w-6 h-6 text-white" />
             </div>
             <div>
-              <h1 className="font-bold text-slate-900 dark:text-white">AttendHub</h1>
-              <p className="text-xs text-slate-600 dark:text-slate-400">Smart Attendance Management</p>
+              <h1 className="font-bold text-slate-900 dark:text-white">
+                AttendHub
+              </h1>
+              <p className="text-xs text-slate-600 dark:text-slate-400">
+                Smart Attendance Management
+              </p>
             </div>
           </div>
           <div className="flex gap-3">
-            <Button variant="outline" onClick={() => navigate("/login")} className="border-slate-200 dark:border-slate-700">
+            <Button
+              variant="outline"
+              onClick={() => navigate("/login")}
+              className="border-slate-200 dark:border-slate-700"
+            >
               Sign In
             </Button>
-            <Button onClick={() => navigate("/register")} className="bg-primary hover:bg-primary-dark text-white">
+            <Button
+              onClick={() => navigate("/register")}
+              className="bg-primary hover:bg-primary-dark text-white"
+            >
               Get Started
             </Button>
           </div>
@@ -89,8 +111,9 @@ export default function Index() {
             </span>
           </h1>
           <p className="text-xl text-slate-600 dark:text-slate-400 max-w-2xl mx-auto mb-8">
-            A comprehensive, futuristic platform for managing student attendance with real-time analytics,
-            smart scheduling, and role-based access control.
+            A comprehensive, futuristic platform for managing student attendance
+            with real-time analytics, smart scheduling, and role-based access
+            control.
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
             <Button
@@ -121,8 +144,12 @@ export default function Index() {
                 <div className="p-3 bg-primary/10 rounded-lg w-fit mb-4 group-hover:bg-primary/20 transition-colors">
                   <Icon className="w-6 h-6 text-primary" />
                 </div>
-                <h3 className="text-lg font-semibold text-slate-900 dark:text-white mb-2">{title}</h3>
-                <p className="text-slate-600 dark:text-slate-400 flex-1">{description}</p>
+                <h3 className="text-lg font-semibold text-slate-900 dark:text-white mb-2">
+                  {title}
+                </h3>
+                <p className="text-slate-600 dark:text-slate-400 flex-1">
+                  {description}
+                </p>
               </div>
             </Card>
           ))}
@@ -152,9 +179,12 @@ export default function Index() {
         <div className="bg-gradient-to-r from-primary via-secondary to-primary/80 rounded-xl p-12 text-center mb-20 relative overflow-hidden group">
           <div className="absolute inset-0 bg-white/10 opacity-0 group-hover:opacity-10 transition-all duration-300"></div>
           <div className="relative z-10">
-            <h2 className="text-3xl md:text-4xl font-bold text-white mb-4">Ready to Transform Your Attendance System?</h2>
+            <h2 className="text-3xl md:text-4xl font-bold text-white mb-4">
+              Ready to Transform Your Attendance System?
+            </h2>
             <p className="text-white/90 max-w-2xl mx-auto mb-8 text-lg">
-              Join institutions worldwide using AttendHub for seamless attendance management
+              Join institutions worldwide using AttendHub for seamless
+              attendance management
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
               <Button
@@ -180,18 +210,26 @@ export default function Index() {
             <div className="flex-1">
               <div className="flex gap-1 mb-4">
                 {[...Array(5)].map((_, i) => (
-                  <span key={i} className="text-yellow-400">★</span>
+                  <span key={i} className="text-yellow-400">
+                    ★
+                  </span>
                 ))}
               </div>
               <p className="text-xl text-slate-900 dark:text-white mb-4 font-semibold">
-                "AttendHub transformed how we manage attendance across our institution."
+                "AttendHub transformed how we manage attendance across our
+                institution."
               </p>
               <p className="text-slate-600 dark:text-slate-400 mb-4">
-                The system is intuitive, reliable, and has reduced administrative overhead by 40%.
-                Students appreciate the transparency in attendance tracking.
+                The system is intuitive, reliable, and has reduced
+                administrative overhead by 40%. Students appreciate the
+                transparency in attendance tracking.
               </p>
-              <p className="font-semibold text-slate-900 dark:text-white">Dr. Sarah Johnson</p>
-              <p className="text-sm text-slate-600 dark:text-slate-400">Director of Academic Affairs, Tech University</p>
+              <p className="font-semibold text-slate-900 dark:text-white">
+                Dr. Sarah Johnson
+              </p>
+              <p className="text-sm text-slate-600 dark:text-slate-400">
+                Director of Academic Affairs, Tech University
+              </p>
             </div>
             <div className="flex-shrink-0">
               <div className="w-24 h-24 bg-gradient-to-br from-primary to-secondary rounded-full flex items-center justify-center">
@@ -211,9 +249,13 @@ export default function Index() {
                 <div className="p-1 bg-primary rounded">
                   <Calendar className="w-4 h-4 text-white" />
                 </div>
-                <span className="font-bold text-slate-900 dark:text-white">AttendHub</span>
+                <span className="font-bold text-slate-900 dark:text-white">
+                  AttendHub
+                </span>
               </div>
-              <p className="text-sm text-slate-600 dark:text-slate-400">Smart attendance management for modern institutions</p>
+              <p className="text-sm text-slate-600 dark:text-slate-400">
+                Smart attendance management for modern institutions
+              </p>
             </div>
             {[
               { title: "Product", links: ["Features", "Pricing", "Security"] },
@@ -221,11 +263,16 @@ export default function Index() {
               { title: "Legal", links: ["Privacy", "Terms", "Contact"] },
             ].map((col, idx) => (
               <div key={idx}>
-                <h4 className="font-semibold text-slate-900 dark:text-white mb-4">{col.title}</h4>
+                <h4 className="font-semibold text-slate-900 dark:text-white mb-4">
+                  {col.title}
+                </h4>
                 <ul className="space-y-2">
                   {col.links.map((link) => (
                     <li key={link}>
-                      <a href="#" className="text-sm text-slate-600 dark:text-slate-400 hover:text-primary">
+                      <a
+                        href="#"
+                        className="text-sm text-slate-600 dark:text-slate-400 hover:text-primary"
+                      >
                         {link}
                       </a>
                     </li>
@@ -237,9 +284,15 @@ export default function Index() {
           <div className="border-t border-slate-200 dark:border-slate-700 pt-8 flex flex-col md:flex-row justify-between items-center text-sm text-slate-600 dark:text-slate-400">
             <p>&copy; 2024 AttendHub. All rights reserved.</p>
             <div className="flex gap-6 mt-4 md:mt-0">
-              <a href="#" className="hover:text-primary">Twitter</a>
-              <a href="#" className="hover:text-primary">LinkedIn</a>
-              <a href="#" className="hover:text-primary">GitHub</a>
+              <a href="#" className="hover:text-primary">
+                Twitter
+              </a>
+              <a href="#" className="hover:text-primary">
+                LinkedIn
+              </a>
+              <a href="#" className="hover:text-primary">
+                GitHub
+              </a>
             </div>
           </div>
         </div>

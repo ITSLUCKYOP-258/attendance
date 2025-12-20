@@ -32,14 +32,78 @@ const App = () => (
           <Route element={<Layout />}>
             <Route path="/dashboard" element={<Dashboard />} />
             <Route path="/admin" element={<AdminDashboard />} />
-            <Route path="/admin/timetable" element={<Placeholder title="Timetable Management" description="Manage class schedules and timings" />} />
-            <Route path="/admin/subjects" element={<Placeholder title="Subject Management" description="Add, edit, or remove subjects" />} />
-            <Route path="/admin/users" element={<Placeholder title="User Management" description="Manage student accounts" />} />
-            <Route path="/admin/roles" element={<Placeholder title="Role Management" description="Configure user roles and permissions" />} />
-            <Route path="/admin/analytics" element={<Placeholder title="Analytics & Reports" description="View attendance analytics and trends" />} />
-            <Route path="/admin/export" element={<Placeholder title="Data Export" description="Export attendance data in various formats" />} />
-            <Route path="/admin/settings" element={<Placeholder title="Global Settings" description="Configure system-wide settings" />} />
-            <Route path="/admin/locks" element={<Placeholder title="Lock Management" description="Configure attendance data locks" />} />
+            <Route
+              path="/admin/timetable"
+              element={
+                <Placeholder
+                  title="Timetable Management"
+                  description="Manage class schedules and timings"
+                />
+              }
+            />
+            <Route
+              path="/admin/subjects"
+              element={
+                <Placeholder
+                  title="Subject Management"
+                  description="Add, edit, or remove subjects"
+                />
+              }
+            />
+            <Route
+              path="/admin/users"
+              element={
+                <Placeholder
+                  title="User Management"
+                  description="Manage student accounts"
+                />
+              }
+            />
+            <Route
+              path="/admin/roles"
+              element={
+                <Placeholder
+                  title="Role Management"
+                  description="Configure user roles and permissions"
+                />
+              }
+            />
+            <Route
+              path="/admin/analytics"
+              element={
+                <Placeholder
+                  title="Analytics & Reports"
+                  description="View attendance analytics and trends"
+                />
+              }
+            />
+            <Route
+              path="/admin/export"
+              element={
+                <Placeholder
+                  title="Data Export"
+                  description="Export attendance data in various formats"
+                />
+              }
+            />
+            <Route
+              path="/admin/settings"
+              element={
+                <Placeholder
+                  title="Global Settings"
+                  description="Configure system-wide settings"
+                />
+              }
+            />
+            <Route
+              path="/admin/locks"
+              element={
+                <Placeholder
+                  title="Lock Management"
+                  description="Configure attendance data locks"
+                />
+              }
+            />
             <Route path="/analytics" element={<Analytics />} />
             <Route path="/settings" element={<Settings />} />
           </Route>

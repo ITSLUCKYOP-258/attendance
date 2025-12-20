@@ -47,14 +47,13 @@ export default function Layout() {
     { icon: Home, label: "Dashboard", href: "/dashboard" },
     { icon: BarChart3, label: "Analytics", href: "/analytics" },
     ...(isAdmin
-      ? [
-          { icon: Shield, label: "Admin Panel", href: "/admin" },
-        ]
+      ? [{ icon: Shield, label: "Admin Panel", href: "/admin" }]
       : []),
     { icon: Settings, label: "Settings", href: "/settings" },
   ];
 
-  const isActive = (href: string) => location.pathname === href || location.pathname.startsWith(href + "/");
+  const isActive = (href: string) =>
+    location.pathname === href || location.pathname.startsWith(href + "/");
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50 to-slate-100 dark:from-slate-950 dark:via-blue-950 dark:to-slate-900">
@@ -67,13 +66,20 @@ export default function Layout() {
       <nav className="relative border-b border-slate-200 dark:border-slate-700 bg-white/50 dark:bg-slate-800/50 backdrop-blur-md sticky top-0 z-50">
         <div className="max-w-7xl mx-auto px-6 py-4 flex items-center justify-between">
           {/* Logo */}
-          <Link to="/dashboard" className="flex items-center gap-3 hover:opacity-80 transition-opacity">
+          <Link
+            to="/dashboard"
+            className="flex items-center gap-3 hover:opacity-80 transition-opacity"
+          >
             <div className="p-2 bg-primary rounded-lg">
               <Calendar className="w-6 h-6 text-white" />
             </div>
             <div className="hidden sm:block">
-              <h1 className="font-bold text-slate-900 dark:text-white">AttendHub</h1>
-              <p className="text-xs text-slate-600 dark:text-slate-400">Attendance Management</p>
+              <h1 className="font-bold text-slate-900 dark:text-white">
+                AttendHub
+              </h1>
+              <p className="text-xs text-slate-600 dark:text-slate-400">
+                Attendance Management
+              </p>
             </div>
           </Link>
 
@@ -121,7 +127,11 @@ export default function Layout() {
               onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
               className="lg:hidden text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-700 p-2 rounded-lg"
             >
-              {isMobileMenuOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
+              {isMobileMenuOpen ? (
+                <X className="w-6 h-6" />
+              ) : (
+                <Menu className="w-6 h-6" />
+              )}
             </button>
           </div>
         </div>

@@ -2,7 +2,13 @@ import { useState } from "react";
 import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
 import { Calendar, ArrowLeft, ArrowRight } from "lucide-react";
 
 export default function Register() {
@@ -46,7 +52,7 @@ export default function Register() {
           branch: formData.branch,
           semester: formData.semester,
           role: "student",
-        })
+        }),
       );
       window.location.href = "/dashboard";
     }, 500);
@@ -65,15 +71,21 @@ export default function Register() {
             <div className="p-2 bg-primary rounded-lg">
               <Calendar className="w-6 h-6 text-white" />
             </div>
-            <h1 className="text-3xl font-bold text-slate-900 dark:text-white">AttendHub</h1>
+            <h1 className="text-3xl font-bold text-slate-900 dark:text-white">
+              AttendHub
+            </h1>
           </div>
-          <p className="text-slate-600 dark:text-slate-400">Create your account</p>
+          <p className="text-slate-600 dark:text-slate-400">
+            Create your account
+          </p>
         </div>
 
         <Card className="backdrop-blur-sm bg-white/95 dark:bg-slate-800/95 border-slate-200 dark:border-slate-700 shadow-xl">
           <CardHeader>
             <CardTitle>
-              {step === "credentials" ? "Account Credentials" : "Profile Information"}
+              {step === "credentials"
+                ? "Account Credentials"
+                : "Profile Information"}
             </CardTitle>
             <CardDescription>
               {step === "credentials"
@@ -93,7 +105,9 @@ export default function Register() {
                       type="email"
                       placeholder="student@university.edu"
                       value={formData.email}
-                      onChange={(e) => handleInputChange("email", e.target.value)}
+                      onChange={(e) =>
+                        handleInputChange("email", e.target.value)
+                      }
                       required
                       className="bg-slate-50 dark:bg-slate-900 border-slate-200 dark:border-slate-700"
                     />
@@ -107,7 +121,9 @@ export default function Register() {
                       type="password"
                       placeholder="Create a strong password"
                       value={formData.password}
-                      onChange={(e) => handleInputChange("password", e.target.value)}
+                      onChange={(e) =>
+                        handleInputChange("password", e.target.value)
+                      }
                       required
                       className="bg-slate-50 dark:bg-slate-900 border-slate-200 dark:border-slate-700"
                     />
@@ -121,7 +137,9 @@ export default function Register() {
                       type="password"
                       placeholder="Confirm your password"
                       value={formData.confirmPassword}
-                      onChange={(e) => handleInputChange("confirmPassword", e.target.value)}
+                      onChange={(e) =>
+                        handleInputChange("confirmPassword", e.target.value)
+                      }
                       required
                       className="bg-slate-50 dark:bg-slate-900 border-slate-200 dark:border-slate-700"
                     />
@@ -137,7 +155,9 @@ export default function Register() {
                       type="text"
                       placeholder="John Doe"
                       value={formData.fullName}
-                      onChange={(e) => handleInputChange("fullName", e.target.value)}
+                      onChange={(e) =>
+                        handleInputChange("fullName", e.target.value)
+                      }
                       required
                       className="bg-slate-50 dark:bg-slate-900 border-slate-200 dark:border-slate-700"
                     />
@@ -151,7 +171,9 @@ export default function Register() {
                       type="text"
                       placeholder="AI-2024-001"
                       value={formData.rollNumber}
-                      onChange={(e) => handleInputChange("rollNumber", e.target.value)}
+                      onChange={(e) =>
+                        handleInputChange("rollNumber", e.target.value)
+                      }
                       required
                       className="bg-slate-50 dark:bg-slate-900 border-slate-200 dark:border-slate-700"
                     />
@@ -164,7 +186,9 @@ export default function Register() {
                       </label>
                       <select
                         value={formData.branch}
-                        onChange={(e) => handleInputChange("branch", e.target.value)}
+                        onChange={(e) =>
+                          handleInputChange("branch", e.target.value)
+                        }
                         className="w-full px-3 py-2 bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-md text-slate-900 dark:text-white"
                       >
                         <option value="ai">AI</option>
@@ -179,7 +203,9 @@ export default function Register() {
                       </label>
                       <select
                         value={formData.semester}
-                        onChange={(e) => handleInputChange("semester", e.target.value)}
+                        onChange={(e) =>
+                          handleInputChange("semester", e.target.value)
+                        }
                         className="w-full px-3 py-2 bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-md text-slate-900 dark:text-white"
                       >
                         {[1, 2, 3, 4, 5, 6].map((sem) => (
@@ -212,7 +238,11 @@ export default function Register() {
                     step === "credentials" ? "col-span-2" : ""
                   }`}
                 >
-                  {isLoading ? "Creating account..." : step === "credentials" ? "Next" : "Create Account"}
+                  {isLoading
+                    ? "Creating account..."
+                    : step === "credentials"
+                      ? "Next"
+                      : "Create Account"}
                   <ArrowRight className="w-4 h-4 ml-2" />
                 </Button>
               </div>
@@ -220,7 +250,10 @@ export default function Register() {
 
             <div className="mt-6 pt-6 border-t border-slate-200 dark:border-slate-700 text-center text-sm text-slate-600 dark:text-slate-400">
               Already have an account?{" "}
-              <Link to="/login" className="text-primary hover:text-primary-dark font-medium">
+              <Link
+                to="/login"
+                className="text-primary hover:text-primary-dark font-medium"
+              >
                 Sign in here
               </Link>
             </div>

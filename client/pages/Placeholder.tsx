@@ -18,14 +18,22 @@ export default function Placeholder({ title, description }: PlaceholderProps) {
       </div>
 
       <div className="relative text-center">
-        <h1 className="text-4xl font-bold text-slate-900 dark:text-white mb-4">{title}</h1>
+        <h1 className="text-4xl font-bold text-slate-900 dark:text-white mb-4">
+          {title}
+        </h1>
         {description && (
-          <p className="text-lg text-slate-600 dark:text-slate-400 mb-8">{description}</p>
+          <p className="text-lg text-slate-600 dark:text-slate-400 mb-8">
+            {description}
+          </p>
         )}
         <p className="text-slate-600 dark:text-slate-400 mb-8">
-          This page is ready to be customized. Let me know what you'd like to build here!
+          This page is ready to be customized. Let me know what you'd like to
+          build here!
         </p>
-        <Button onClick={() => navigate(-1)} className="bg-primary hover:bg-primary-dark text-white">
+        <Button
+          onClick={() => navigate(-1)}
+          className="bg-primary hover:bg-primary-dark text-white"
+        >
           <ArrowLeft className="w-4 h-4 mr-2" />
           Go Back
         </Button>

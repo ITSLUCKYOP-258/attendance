@@ -1,8 +1,21 @@
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
-import { Settings as SettingsIcon, Bell, Lock, User, Sun, Moon } from "lucide-react";
+import {
+  Settings as SettingsIcon,
+  Bell,
+  Lock,
+  User,
+  Sun,
+  Moon,
+} from "lucide-react";
 
 export default function Settings() {
   const [isDarkMode, setIsDarkMode] = useState(false);
@@ -38,9 +51,13 @@ export default function Settings() {
             <div className="p-2 bg-primary rounded-lg">
               <SettingsIcon className="w-6 h-6 text-white" />
             </div>
-            <h1 className="text-4xl font-bold text-slate-900 dark:text-white">Settings</h1>
+            <h1 className="text-4xl font-bold text-slate-900 dark:text-white">
+              Settings
+            </h1>
           </div>
-          <p className="text-slate-600 dark:text-slate-400">Manage your account preferences and settings</p>
+          <p className="text-slate-600 dark:text-slate-400">
+            Manage your account preferences and settings
+          </p>
         </div>
 
         {/* Settings Sections */}
@@ -52,20 +69,28 @@ export default function Settings() {
                 <User className="w-5 h-5 text-primary" />
                 Profile Information
               </CardTitle>
-              <CardDescription>Update your personal information</CardDescription>
+              <CardDescription>
+                Update your personal information
+              </CardDescription>
             </CardHeader>
             <CardContent className="space-y-4">
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div className="space-y-2">
-                  <label className="text-sm font-medium text-slate-700 dark:text-slate-300">Full Name</label>
+                  <label className="text-sm font-medium text-slate-700 dark:text-slate-300">
+                    Full Name
+                  </label>
                   <Input
                     value={formData.fullName}
-                    onChange={(e) => handleInputChange("fullName", e.target.value)}
+                    onChange={(e) =>
+                      handleInputChange("fullName", e.target.value)
+                    }
                     className="bg-slate-50 dark:bg-slate-900 border-slate-200 dark:border-slate-700"
                   />
                 </div>
                 <div className="space-y-2">
-                  <label className="text-sm font-medium text-slate-700 dark:text-slate-300">Email Address</label>
+                  <label className="text-sm font-medium text-slate-700 dark:text-slate-300">
+                    Email Address
+                  </label>
                   <Input
                     type="email"
                     value={formData.email}
@@ -75,14 +100,18 @@ export default function Settings() {
                 </div>
               </div>
               <div className="space-y-2">
-                <label className="text-sm font-medium text-slate-700 dark:text-slate-300">Phone Number</label>
+                <label className="text-sm font-medium text-slate-700 dark:text-slate-300">
+                  Phone Number
+                </label>
                 <Input
                   value={formData.phone}
                   onChange={(e) => handleInputChange("phone", e.target.value)}
                   className="bg-slate-50 dark:bg-slate-900 border-slate-200 dark:border-slate-700"
                 />
               </div>
-              <Button className="bg-primary hover:bg-primary-dark text-white">Save Profile Changes</Button>
+              <Button className="bg-primary hover:bg-primary-dark text-white">
+                Save Profile Changes
+              </Button>
             </CardContent>
           </Card>
 
@@ -93,39 +122,55 @@ export default function Settings() {
                 <Lock className="w-5 h-5 text-primary" />
                 Password & Security
               </CardTitle>
-              <CardDescription>Change your password and security settings</CardDescription>
+              <CardDescription>
+                Change your password and security settings
+              </CardDescription>
             </CardHeader>
             <CardContent className="space-y-4">
               <div className="space-y-2">
-                <label className="text-sm font-medium text-slate-700 dark:text-slate-300">Current Password</label>
+                <label className="text-sm font-medium text-slate-700 dark:text-slate-300">
+                  Current Password
+                </label>
                 <Input
                   type="password"
                   value={formData.currentPassword}
-                  onChange={(e) => handleInputChange("currentPassword", e.target.value)}
+                  onChange={(e) =>
+                    handleInputChange("currentPassword", e.target.value)
+                  }
                   className="bg-slate-50 dark:bg-slate-900 border-slate-200 dark:border-slate-700"
                 />
               </div>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div className="space-y-2">
-                  <label className="text-sm font-medium text-slate-700 dark:text-slate-300">New Password</label>
+                  <label className="text-sm font-medium text-slate-700 dark:text-slate-300">
+                    New Password
+                  </label>
                   <Input
                     type="password"
                     value={formData.newPassword}
-                    onChange={(e) => handleInputChange("newPassword", e.target.value)}
+                    onChange={(e) =>
+                      handleInputChange("newPassword", e.target.value)
+                    }
                     className="bg-slate-50 dark:bg-slate-900 border-slate-200 dark:border-slate-700"
                   />
                 </div>
                 <div className="space-y-2">
-                  <label className="text-sm font-medium text-slate-700 dark:text-slate-300">Confirm Password</label>
+                  <label className="text-sm font-medium text-slate-700 dark:text-slate-300">
+                    Confirm Password
+                  </label>
                   <Input
                     type="password"
                     value={formData.confirmPassword}
-                    onChange={(e) => handleInputChange("confirmPassword", e.target.value)}
+                    onChange={(e) =>
+                      handleInputChange("confirmPassword", e.target.value)
+                    }
                     className="bg-slate-50 dark:bg-slate-900 border-slate-200 dark:border-slate-700"
                   />
                 </div>
               </div>
-              <Button className="bg-primary hover:bg-primary-dark text-white">Update Password</Button>
+              <Button className="bg-primary hover:bg-primary-dark text-white">
+                Update Password
+              </Button>
             </CardContent>
           </Card>
 
@@ -141,10 +186,18 @@ export default function Settings() {
             <CardContent className="space-y-4">
               <div className="flex items-center justify-between p-4 bg-slate-50 dark:bg-slate-700 rounded-lg">
                 <div className="flex items-center gap-3">
-                  {isDarkMode ? <Moon className="w-5 h-5 text-primary" /> : <Sun className="w-5 h-5 text-primary" />}
+                  {isDarkMode ? (
+                    <Moon className="w-5 h-5 text-primary" />
+                  ) : (
+                    <Sun className="w-5 h-5 text-primary" />
+                  )}
                   <div>
-                    <p className="font-medium text-slate-900 dark:text-white">Dark Mode</p>
-                    <p className="text-sm text-slate-600 dark:text-slate-400">Toggle dark theme</p>
+                    <p className="font-medium text-slate-900 dark:text-white">
+                      Dark Mode
+                    </p>
+                    <p className="text-sm text-slate-600 dark:text-slate-400">
+                      Toggle dark theme
+                    </p>
                   </div>
                 </div>
                 <button
@@ -165,8 +218,12 @@ export default function Settings() {
                 <div className="flex items-center gap-3">
                   <Bell className="w-5 h-5 text-primary" />
                   <div>
-                    <p className="font-medium text-slate-900 dark:text-white">Email Notifications</p>
-                    <p className="text-sm text-slate-600 dark:text-slate-400">Receive email alerts</p>
+                    <p className="font-medium text-slate-900 dark:text-white">
+                      Email Notifications
+                    </p>
+                    <p className="text-sm text-slate-600 dark:text-slate-400">
+                      Receive email alerts
+                    </p>
                   </div>
                 </div>
                 <button className="relative inline-flex h-8 w-14 items-center rounded-full transition-colors bg-primary">

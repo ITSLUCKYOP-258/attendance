@@ -1,5 +1,25 @@
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { BarChart, Bar, LineChart, Line, PieChart, Pie, Cell, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from "recharts";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
+import {
+  BarChart,
+  Bar,
+  LineChart,
+  Line,
+  PieChart,
+  Pie,
+  Cell,
+  XAxis,
+  YAxis,
+  CartesianGrid,
+  Tooltip,
+  Legend,
+  ResponsiveContainer,
+} from "recharts";
 import { TrendingUp, Calendar, Target, AlertCircle } from "lucide-react";
 
 export default function Analytics() {
@@ -54,9 +74,13 @@ export default function Analytics() {
             <div className="p-2 bg-primary rounded-lg">
               <TrendingUp className="w-6 h-6 text-white" />
             </div>
-            <h1 className="text-4xl font-bold text-slate-900 dark:text-white">Analytics & Reports</h1>
+            <h1 className="text-4xl font-bold text-slate-900 dark:text-white">
+              Analytics & Reports
+            </h1>
           </div>
-          <p className="text-slate-600 dark:text-slate-400">Track your attendance trends and performance metrics</p>
+          <p className="text-slate-600 dark:text-slate-400">
+            Track your attendance trends and performance metrics
+          </p>
         </div>
 
         {/* Key Metrics */}
@@ -64,7 +88,9 @@ export default function Analytics() {
           <Card className="backdrop-blur-sm bg-white/95 dark:bg-slate-800/95 border-slate-200 dark:border-slate-700">
             <CardContent className="pt-6">
               <div className="space-y-2">
-                <p className="text-sm text-slate-600 dark:text-slate-400">Current Percentage</p>
+                <p className="text-sm text-slate-600 dark:text-slate-400">
+                  Current Percentage
+                </p>
                 <p className="text-3xl font-bold text-primary">87.5%</p>
                 <p className="text-xs text-success">↑ 2.5% from last month</p>
               </div>
@@ -74,9 +100,13 @@ export default function Analytics() {
           <Card className="backdrop-blur-sm bg-white/95 dark:bg-slate-800/95 border-slate-200 dark:border-slate-700">
             <CardContent className="pt-6">
               <div className="space-y-2">
-                <p className="text-sm text-slate-600 dark:text-slate-400">Classes Attended</p>
+                <p className="text-sm text-slate-600 dark:text-slate-400">
+                  Classes Attended
+                </p>
                 <p className="text-3xl font-bold text-success">156</p>
-                <p className="text-xs text-slate-600 dark:text-slate-400">Out of 178 total</p>
+                <p className="text-xs text-slate-600 dark:text-slate-400">
+                  Out of 178 total
+                </p>
               </div>
             </CardContent>
           </Card>
@@ -84,9 +114,13 @@ export default function Analytics() {
           <Card className="backdrop-blur-sm bg-white/95 dark:bg-slate-800/95 border-slate-200 dark:border-slate-700">
             <CardContent className="pt-6">
               <div className="space-y-2">
-                <p className="text-sm text-slate-600 dark:text-slate-400">Target Status</p>
+                <p className="text-sm text-slate-600 dark:text-slate-400">
+                  Target Status
+                </p>
                 <p className="text-3xl font-bold text-success">On Track</p>
-                <p className="text-xs text-slate-600 dark:text-slate-400">12.5% above threshold</p>
+                <p className="text-xs text-slate-600 dark:text-slate-400">
+                  12.5% above threshold
+                </p>
               </div>
             </CardContent>
           </Card>
@@ -94,9 +128,13 @@ export default function Analytics() {
           <Card className="backdrop-blur-sm bg-white/95 dark:bg-slate-800/95 border-slate-200 dark:border-slate-700">
             <CardContent className="pt-6">
               <div className="space-y-2">
-                <p className="text-sm text-slate-600 dark:text-slate-400">Attendance Streak</p>
+                <p className="text-sm text-slate-600 dark:text-slate-400">
+                  Attendance Streak
+                </p>
                 <p className="text-3xl font-bold text-primary">8 days</p>
-                <p className="text-xs text-slate-600 dark:text-slate-400">Keep it up!</p>
+                <p className="text-xs text-slate-600 dark:text-slate-400">
+                  Keep it up!
+                </p>
               </div>
             </CardContent>
           </Card>
@@ -108,12 +146,17 @@ export default function Analytics() {
           <Card className="backdrop-blur-sm bg-white/95 dark:bg-slate-800/95 border-slate-200 dark:border-slate-700">
             <CardHeader>
               <CardTitle>Monthly Attendance Trend</CardTitle>
-              <CardDescription>Your attendance percentage over the past 6 months</CardDescription>
+              <CardDescription>
+                Your attendance percentage over the past 6 months
+              </CardDescription>
             </CardHeader>
             <CardContent>
               <ResponsiveContainer width="100%" height={300}>
                 <LineChart data={attendanceTrendData}>
-                  <CartesianGrid strokeDasharray="3 3" stroke="hsl(var(--border))" />
+                  <CartesianGrid
+                    strokeDasharray="3 3"
+                    stroke="hsl(var(--border))"
+                  />
                   <XAxis stroke="hsl(var(--muted-foreground))" />
                   <YAxis stroke="hsl(var(--muted-foreground))" />
                   <Tooltip
@@ -172,13 +215,24 @@ export default function Analytics() {
         <Card className="backdrop-blur-sm bg-white/95 dark:bg-slate-800/95 border-slate-200 dark:border-slate-700 mb-6">
           <CardHeader>
             <CardTitle>Subject-wise Attendance</CardTitle>
-            <CardDescription>Your attendance percentage in each subject</CardDescription>
+            <CardDescription>
+              Your attendance percentage in each subject
+            </CardDescription>
           </CardHeader>
           <CardContent>
             <ResponsiveContainer width="100%" height={300}>
               <BarChart data={subjectAttendance}>
-                <CartesianGrid strokeDasharray="3 3" stroke="hsl(var(--border))" />
-                <XAxis dataKey="subject" stroke="hsl(var(--muted-foreground))" angle={-45} textAnchor="end" height={100} />
+                <CartesianGrid
+                  strokeDasharray="3 3"
+                  stroke="hsl(var(--border))"
+                />
+                <XAxis
+                  dataKey="subject"
+                  stroke="hsl(var(--muted-foreground))"
+                  angle={-45}
+                  textAnchor="end"
+                  height={100}
+                />
                 <YAxis stroke="hsl(var(--muted-foreground))" />
                 <Tooltip
                   contentStyle={{
@@ -187,7 +241,11 @@ export default function Analytics() {
                     borderRadius: "8px",
                   }}
                 />
-                <Bar dataKey="percentage" fill="hsl(var(--primary))" radius={[8, 8, 0, 0]} />
+                <Bar
+                  dataKey="percentage"
+                  fill="hsl(var(--primary))"
+                  radius={[8, 8, 0, 0]}
+                />
               </BarChart>
             </ResponsiveContainer>
           </CardContent>
@@ -204,7 +262,10 @@ export default function Analytics() {
             <CardContent>
               <ResponsiveContainer width="100%" height={300}>
                 <BarChart data={weeklyData}>
-                  <CartesianGrid strokeDasharray="3 3" stroke="hsl(var(--border))" />
+                  <CartesianGrid
+                    strokeDasharray="3 3"
+                    stroke="hsl(var(--border))"
+                  />
                   <XAxis dataKey="week" stroke="hsl(var(--muted-foreground))" />
                   <YAxis stroke="hsl(var(--muted-foreground))" />
                   <Tooltip
@@ -215,8 +276,16 @@ export default function Analytics() {
                     }}
                   />
                   <Legend />
-                  <Bar dataKey="classes" fill="hsl(var(--secondary))" name="Total Classes" />
-                  <Bar dataKey="attended" fill="hsl(var(--primary))" name="Classes Attended" />
+                  <Bar
+                    dataKey="classes"
+                    fill="hsl(var(--secondary))"
+                    name="Total Classes"
+                  />
+                  <Bar
+                    dataKey="attended"
+                    fill="hsl(var(--primary))"
+                    name="Classes Attended"
+                  />
                 </BarChart>
               </ResponsiveContainer>
             </CardContent>
@@ -236,8 +305,12 @@ export default function Analytics() {
                 <div className="flex gap-3">
                   <TrendingUp className="w-5 h-5 text-success flex-shrink-0 mt-0.5" />
                   <div>
-                    <p className="font-semibold text-slate-900 dark:text-white">Great Progress!</p>
-                    <p className="text-sm text-slate-600 dark:text-slate-400">You've improved 5% this month</p>
+                    <p className="font-semibold text-slate-900 dark:text-white">
+                      Great Progress!
+                    </p>
+                    <p className="text-sm text-slate-600 dark:text-slate-400">
+                      You've improved 5% this month
+                    </p>
                   </div>
                 </div>
               </div>
@@ -246,8 +319,12 @@ export default function Analytics() {
                 <div className="flex gap-3">
                   <Target className="w-5 h-5 text-primary flex-shrink-0 mt-0.5" />
                   <div>
-                    <p className="font-semibold text-slate-900 dark:text-white">On Track for Target</p>
-                    <p className="text-sm text-slate-600 dark:text-slate-400">Maintain 75% to graduate</p>
+                    <p className="font-semibold text-slate-900 dark:text-white">
+                      On Track for Target
+                    </p>
+                    <p className="text-sm text-slate-600 dark:text-slate-400">
+                      Maintain 75% to graduate
+                    </p>
                   </div>
                 </div>
               </div>
@@ -256,8 +333,12 @@ export default function Analytics() {
                 <div className="flex gap-3">
                   <AlertCircle className="w-5 h-5 text-warning flex-shrink-0 mt-0.5" />
                   <div>
-                    <p className="font-semibold text-slate-900 dark:text-white">Watch Database Systems</p>
-                    <p className="text-sm text-slate-600 dark:text-slate-400">Attendance at 78% in this subject</p>
+                    <p className="font-semibold text-slate-900 dark:text-white">
+                      Watch Database Systems
+                    </p>
+                    <p className="text-sm text-slate-600 dark:text-slate-400">
+                      Attendance at 78% in this subject
+                    </p>
                   </div>
                 </div>
               </div>
@@ -266,8 +347,12 @@ export default function Analytics() {
                 <div className="flex gap-3">
                   <Calendar className="w-5 h-5 text-accent flex-shrink-0 mt-0.5" />
                   <div>
-                    <p className="font-semibold text-slate-900 dark:text-white">Next Milestone</p>
-                    <p className="text-sm text-slate-600 dark:text-slate-400">6 more classes to reach 90%</p>
+                    <p className="font-semibold text-slate-900 dark:text-white">
+                      Next Milestone
+                    </p>
+                    <p className="text-sm text-slate-600 dark:text-slate-400">
+                      6 more classes to reach 90%
+                    </p>
                   </div>
                 </div>
               </div>

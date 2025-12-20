@@ -1,6 +1,19 @@
 import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { BarChart3, Users, Clock, Settings, Lock, TrendingUp } from "lucide-react";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
+import {
+  BarChart3,
+  Users,
+  Clock,
+  Settings,
+  Lock,
+  TrendingUp,
+} from "lucide-react";
 import { Link } from "react-router-dom";
 
 export default function AdminDashboard() {
@@ -14,8 +27,12 @@ export default function AdminDashboard() {
       <div className="relative max-w-7xl mx-auto p-6">
         {/* Header */}
         <div className="mb-8">
-          <h1 className="text-4xl font-bold text-slate-900 dark:text-white mb-2">Admin Dashboard</h1>
-          <p className="text-slate-600 dark:text-slate-400">Manage system settings, users, and attendance data</p>
+          <h1 className="text-4xl font-bold text-slate-900 dark:text-white mb-2">
+            Admin Dashboard
+          </h1>
+          <p className="text-slate-600 dark:text-slate-400">
+            Manage system settings, users, and attendance data
+          </p>
         </div>
 
         {/* Quick Stats */}
@@ -24,8 +41,12 @@ export default function AdminDashboard() {
             <CardContent className="pt-6">
               <div className="flex items-center justify-between">
                 <div>
-                  <p className="text-sm text-slate-600 dark:text-slate-400">Total Students</p>
-                  <p className="text-2xl font-bold text-slate-900 dark:text-white mt-1">1,234</p>
+                  <p className="text-sm text-slate-600 dark:text-slate-400">
+                    Total Students
+                  </p>
+                  <p className="text-2xl font-bold text-slate-900 dark:text-white mt-1">
+                    1,234
+                  </p>
                 </div>
                 <Users className="w-8 h-8 text-primary opacity-20" />
               </div>
@@ -36,7 +57,9 @@ export default function AdminDashboard() {
             <CardContent className="pt-6">
               <div className="flex items-center justify-between">
                 <div>
-                  <p className="text-sm text-slate-600 dark:text-slate-400">Avg Attendance</p>
+                  <p className="text-sm text-slate-600 dark:text-slate-400">
+                    Avg Attendance
+                  </p>
                   <p className="text-2xl font-bold text-success mt-1">78.5%</p>
                 </div>
                 <TrendingUp className="w-8 h-8 text-success opacity-20" />
@@ -48,7 +71,9 @@ export default function AdminDashboard() {
             <CardContent className="pt-6">
               <div className="flex items-center justify-between">
                 <div>
-                  <p className="text-sm text-slate-600 dark:text-slate-400">Classes Added</p>
+                  <p className="text-sm text-slate-600 dark:text-slate-400">
+                    Classes Added
+                  </p>
                   <p className="text-2xl font-bold text-primary mt-1">45</p>
                 </div>
                 <Clock className="w-8 h-8 text-primary opacity-20" />
@@ -60,8 +85,12 @@ export default function AdminDashboard() {
             <CardContent className="pt-6">
               <div className="flex items-center justify-between">
                 <div>
-                  <p className="text-sm text-slate-600 dark:text-slate-400">Data Locked</p>
-                  <p className="text-2xl font-bold text-slate-900 dark:text-white mt-1">7 days ago</p>
+                  <p className="text-sm text-slate-600 dark:text-slate-400">
+                    Data Locked
+                  </p>
+                  <p className="text-2xl font-bold text-slate-900 dark:text-white mt-1">
+                    7 days ago
+                  </p>
                 </div>
                 <Lock className="w-8 h-8 text-error opacity-20" />
               </div>
@@ -77,7 +106,9 @@ export default function AdminDashboard() {
                 <Clock className="w-5 h-5 text-primary" />
                 Timetable Management
               </CardTitle>
-              <CardDescription>Edit schedules, add/remove subjects, and manage class timings</CardDescription>
+              <CardDescription>
+                Edit schedules, add/remove subjects, and manage class timings
+              </CardDescription>
             </CardHeader>
             <CardContent>
               <div className="space-y-2">
@@ -101,7 +132,9 @@ export default function AdminDashboard() {
                 <Users className="w-5 h-5 text-primary" />
                 User Management
               </CardTitle>
-              <CardDescription>Add, edit, or remove student accounts and manage roles</CardDescription>
+              <CardDescription>
+                Add, edit, or remove student accounts and manage roles
+              </CardDescription>
             </CardHeader>
             <CardContent>
               <div className="space-y-2">
@@ -125,7 +158,9 @@ export default function AdminDashboard() {
                 <BarChart3 className="w-5 h-5 text-primary" />
                 Analytics & Reporting
               </CardTitle>
-              <CardDescription>View attendance trends, heatmaps, and generate reports</CardDescription>
+              <CardDescription>
+                View attendance trends, heatmaps, and generate reports
+              </CardDescription>
             </CardHeader>
             <CardContent>
               <div className="space-y-2">
@@ -149,7 +184,9 @@ export default function AdminDashboard() {
                 <Settings className="w-5 h-5 text-primary" />
                 System Settings
               </CardTitle>
-              <CardDescription>Configure thresholds, holidays, and lock attendance edits</CardDescription>
+              <CardDescription>
+                Configure thresholds, holidays, and lock attendance edits
+              </CardDescription>
             </CardHeader>
             <CardContent>
               <div className="space-y-2">
