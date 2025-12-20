@@ -12,6 +12,8 @@ import Login from "./pages/Login";
 import Register from "./pages/Register";
 import Dashboard from "./pages/Dashboard";
 import AdminDashboard from "./pages/AdminDashboard";
+import Analytics from "./pages/Analytics";
+import Settings from "./pages/Settings";
 import Placeholder from "./pages/Placeholder";
 import Layout from "./components/Layout";
 
@@ -38,8 +40,8 @@ const App = () => (
             <Route path="/admin/export" element={<Placeholder title="Data Export" description="Export attendance data in various formats" />} />
             <Route path="/admin/settings" element={<Placeholder title="Global Settings" description="Configure system-wide settings" />} />
             <Route path="/admin/locks" element={<Placeholder title="Lock Management" description="Configure attendance data locks" />} />
-            <Route path="/analytics" element={<Placeholder title="My Analytics" description="View your personal attendance analytics" />} />
-            <Route path="/settings" element={<Placeholder title="Settings" description="Manage your account preferences" />} />
+            <Route path="/analytics" element={<Analytics />} />
+            <Route path="/settings" element={<Settings />} />
           </Route>
           {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
           <Route path="*" element={<NotFound />} />
