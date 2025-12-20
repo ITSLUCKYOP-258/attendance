@@ -69,7 +69,12 @@ const TIMETABLE_BY_DAY: Record<number, Class[]> = {
     { id: "4", subject: "FC", time: "01:50-02:40", room: "Classroom" },
     { id: "5", subject: "EM-I", time: "02:40-03:30", room: "Classroom" },
     { id: "6", subject: "ES", time: "03:30-04:20", room: "Classroom" },
-    { id: "7", subject: "Value Education", time: "04:20-05:10", room: "Classroom" },
+    {
+      id: "7",
+      subject: "Value Education",
+      time: "04:20-05:10",
+      room: "Classroom",
+    },
   ],
   2: [
     // Tuesday
@@ -117,7 +122,12 @@ const TIMETABLE_BY_DAY: Record<number, Class[]> = {
       room: "Lab",
     },
     { id: "32", subject: "LPCC", time: "03:30-04:20", room: "Classroom" },
-    { id: "33", subject: "Value Education", time: "04:20-05:10", room: "Classroom" },
+    {
+      id: "33",
+      subject: "Value Education",
+      time: "04:20-05:10",
+      room: "Classroom",
+    },
   ],
   6: [
     // Saturday
@@ -167,13 +177,12 @@ export default function Dashboard() {
         if (response.ok) {
           const result = await response.json();
           if (result.data && result.data.rows) {
-            const attendanceData: Record<string, Record<string, "present" | "absent">> = {};
+            const attendanceData: Record<
+              string,
+              Record<string, "present" | "absent">
+            > = {};
             result.data.rows.forEach(
-              (row: {
-                date: string;
-                class_id: string;
-                status: string;
-              }) => {
+              (row: { date: string; class_id: string; status: string }) => {
                 if (!attendanceData[row.date]) {
                   attendanceData[row.date] = {};
                 }

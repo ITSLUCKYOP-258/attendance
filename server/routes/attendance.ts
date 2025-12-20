@@ -3,7 +3,8 @@ import { saveAttendance, getAttendance, deleteAttendance } from "../db";
 
 export const handleSaveAttendance: RequestHandler = async (req, res) => {
   try {
-    const { userEmail, date, classId, subject, timeSlot, room, status } = req.body;
+    const { userEmail, date, classId, subject, timeSlot, room, status } =
+      req.body;
 
     if (!userEmail || !date || !classId || !status) {
       return res.status(400).json({
@@ -11,7 +12,15 @@ export const handleSaveAttendance: RequestHandler = async (req, res) => {
       });
     }
 
-    const result = await saveAttendance(userEmail, date, classId, subject, timeSlot, room, status);
+    const result = await saveAttendance(
+      userEmail,
+      date,
+      classId,
+      subject,
+      timeSlot,
+      room,
+      status,
+    );
     res.json({
       success: true,
       message: "Attendance saved successfully",

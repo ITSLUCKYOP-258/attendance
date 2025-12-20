@@ -84,11 +84,21 @@ export async function getAttendance(userEmail: string, date?: string) {
   );
 }
 
-export async function deleteAttendance(userEmail: string, date: string, classId: string) {
+export async function deleteAttendance(
+  userEmail: string,
+  date: string,
+  classId: string,
+) {
   return query(
     `DELETE FROM attendance WHERE user_email = $1 AND date = $2 AND class_id = $3;`,
     [userEmail, date, classId],
   );
 }
 
-export default { query, initializeDatabase, saveAttendance, getAttendance, deleteAttendance };
+export default {
+  query,
+  initializeDatabase,
+  saveAttendance,
+  getAttendance,
+  deleteAttendance,
+};
