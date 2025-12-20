@@ -3,6 +3,13 @@ import { saveAttendance, getAttendance, deleteAttendance } from "../db";
 
 export const handleSaveAttendance: RequestHandler = async (req, res) => {
   try {
+    if (!process.env.DATABASE_URL) {
+      return res.status(503).json({
+        error: "Database service unavailable",
+        details: "DATABASE_URL environment variable is not configured. Please configure it in your Netlify environment variables.",
+      });
+    }
+
     const { userEmail, date, classId, subject, timeSlot, room, status } =
       req.body;
 
