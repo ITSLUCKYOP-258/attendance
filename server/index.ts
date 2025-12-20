@@ -2,6 +2,17 @@ import "dotenv/config";
 import express from "express";
 import cors from "cors";
 import { handleDemo } from "./routes/demo";
+import {
+  handleSaveAttendance,
+  handleGetAttendance,
+  handleDeleteAttendance,
+} from "./routes/attendance";
+import { initializeDatabase } from "./db";
+
+// Initialize database on startup
+initializeDatabase().catch((error) => {
+  console.error("Failed to initialize database:", error);
+});
 
 export function createServer() {
   const app = express();
@@ -18,6 +29,11 @@ export function createServer() {
   });
 
   app.get("/api/demo", handleDemo);
+
+  // Attendance API routes
+  app.post("/api/attendance/save", handleSaveAttendance);
+  app.get("/api/attendance/get", handleGetAttendance);
+  app.post("/api/attendance/delete", handleDeleteAttendance);
 
   return app;
 }

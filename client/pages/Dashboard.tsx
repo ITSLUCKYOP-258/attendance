@@ -1,4 +1,15 @@
-import { useState, useMemo } from "react";
+import { useState, useMemo, useEffect } from "react";
+import {
+  startOfMonth,
+  endOfMonth,
+  eachDayOfInterval,
+  startOfWeek,
+  isSameMonth,
+  isSameDay,
+  addMonths,
+  subMonths,
+  addDays,
+} from "date-fns";
 import { Button } from "@/components/ui/button";
 import {
   Card,
@@ -49,112 +60,197 @@ const MONTHS = [
 ];
 
 // Timetable data based on the provided schedule (MON-SAT)
-// Corrected as per the official timetable image
 const TIMETABLE_BY_DAY: Record<number, Class[]> = {
   1: [
     // Monday
-    { id: "1", subject: "IKS", time: "10:30-11:20", room: "AS" },
-    { id: "2", subject: "BEE(PM)", time: "11:20-12:10", room: "PM" },
-    { id: "3", subject: "LPCC(RM)", time: "12:10-01:00", room: "RM" },
-    { id: "4", subject: "FC(GB)", time: "01:50-02:40", room: "GB" },
-    { id: "5", subject: "EM-I(DKY)", time: "02:40-03:30", room: "DKY" },
-    { id: "6", subject: "ES(RS)", time: "03:30-04:20", room: "RS" },
+    { id: "1", subject: "IKS", time: "10:30-11:20", room: "Classroom" },
+    { id: "2", subject: "BEE", time: "11:20-12:10", room: "Classroom" },
+    { id: "3", subject: "LPCC", time: "12:10-01:00", room: "Classroom" },
+    { id: "4", subject: "FC", time: "01:50-02:40", room: "Classroom" },
+    { id: "5", subject: "EM-I", time: "02:40-03:30", room: "Classroom" },
+    { id: "6", subject: "ES", time: "03:30-04:20", room: "Classroom" },
+    {
+      id: "7",
+      subject: "Value Education",
+      time: "04:20-05:10",
+      room: "Classroom",
+    },
   ],
   2: [
     // Tuesday
     {
-      id: "7",
+      id: "8",
       subject: "BEE LAB / LPCC LAB",
-      time: "10:30-11:20",
-      room: "BATCH I/II",
+      time: "10:30-12:10",
+      room: "Lab",
     },
-    { id: "8", subject: "PCS(AS)", time: "11:20-12:10", room: "AS" },
-    { id: "9", subject: "FC(GB)", time: "01:50-02:40", room: "GB" },
-    { id: "10", subject: "ES(RS)", time: "03:30-04:20", room: "RS" },
-    { id: "11", subject: "IKS(AS)", time: "04:20-05:10", room: "AS" },
+    { id: "9", subject: "PCS", time: "12:10-01:00", room: "Classroom" },
+    { id: "10", subject: "FC", time: "01:50-02:40", room: "Classroom" },
+    { id: "11", subject: "ES", time: "02:40-03:30", room: "Classroom" },
+    { id: "12", subject: "IKS", time: "03:30-04:20", room: "Classroom" },
+    { id: "13", subject: "Library", time: "04:20-05:10", room: "Library" },
   ],
   3: [
     // Wednesday
-    { id: "12", subject: "FC(GB)", time: "10:30-11:20", room: "GB" },
-    { id: "13", subject: "BEE(PM)", time: "11:20-12:10", room: "PM" },
-    { id: "14", subject: "EM-I(DKY)", time: "12:10-01:00", room: "DKY" },
-    { id: "15", subject: "LPCC(RM)", time: "01:50-02:40", room: "RM" },
-    { id: "16", subject: "PCS(AS)", time: "02:40-03:30", room: "AS" },
-    { id: "17", subject: "EM-I(DKY)", time: "03:30-04:20", room: "DKY" },
-    { id: "18", subject: "ES(RS)", time: "04:20-05:10", room: "RS" },
+    { id: "14", subject: "FC", time: "10:30-11:20", room: "Classroom" },
+    { id: "15", subject: "BEE", time: "11:20-12:10", room: "Classroom" },
+    { id: "16", subject: "EM-I", time: "12:10-01:00", room: "Classroom" },
+    { id: "17", subject: "LPCC", time: "01:50-02:40", room: "Classroom" },
+    { id: "18", subject: "PCS", time: "02:40-03:30", room: "Classroom" },
+    { id: "19", subject: "EM-I", time: "03:30-04:20", room: "Classroom" },
+    { id: "20", subject: "ES", time: "04:20-05:10", room: "Classroom" },
   ],
   4: [
     // Thursday
-    { id: "19", subject: "ES(RS)", time: "10:30-11:20", room: "RS" },
-    { id: "20", subject: "BEE(PM)", time: "11:20-12:10", room: "PM" },
-    { id: "21", subject: "PCS(AS)", time: "12:10-01:00", room: "AS" },
-    { id: "22", subject: "EM-I(DKY)", time: "01:50-02:40", room: "DKY" },
-    { id: "23", subject: "LPCC(RM)", time: "02:40-03:30", room: "RM" },
-    { id: "24", subject: "ES(RS)", time: "03:30-04:20", room: "RS" },
+    { id: "21", subject: "ES", time: "10:30-11:20", room: "Classroom" },
+    { id: "22", subject: "BEE", time: "11:20-12:10", room: "Classroom" },
+    { id: "23", subject: "PCS", time: "12:10-01:00", room: "Classroom" },
+    { id: "24", subject: "EM-I", time: "01:50-02:40", room: "Classroom" },
+    { id: "25", subject: "LPCC", time: "02:40-03:30", room: "Classroom" },
+    { id: "26", subject: "ES", time: "03:30-04:20", room: "Classroom" },
+    { id: "27", subject: "Library", time: "04:20-05:10", room: "Library" },
   ],
   5: [
     // Friday
-    { id: "25", subject: "IKS(AS)", time: "10:30-11:20", room: "AS" },
-    { id: "26", subject: "BEE(PM)", time: "11:20-12:10", room: "PM" },
-    { id: "27", subject: "FC(GB)", time: "12:10-01:00", room: "GB" },
+    { id: "28", subject: "IKS", time: "10:30-11:20", room: "Classroom" },
+    { id: "29", subject: "BEE", time: "11:20-12:10", room: "Classroom" },
+    { id: "30", subject: "FC", time: "12:10-01:00", room: "Classroom" },
     {
-      id: "28",
+      id: "31",
+      subject: "LPCC LAB / BEE LAB",
+      time: "01:50-03:30",
+      room: "Lab",
+    },
+    { id: "32", subject: "LPCC", time: "03:30-04:20", room: "Classroom" },
+    {
+      id: "33",
       subject: "Value Education",
       time: "04:20-05:10",
-      room: "Auditorium",
+      room: "Classroom",
     },
   ],
   6: [
     // Saturday
-    { id: "29", subject: "EM-I(DKY)", time: "10:30-11:20", room: "DKY" },
-    { id: "30", subject: "BEE(PM)", time: "11:20-12:10", room: "PM" },
-    { id: "31", subject: "LPCC(RM)", time: "12:10-01:00", room: "RM" },
-    { id: "32", subject: "FC(GB)", time: "01:50-02:40", room: "GB" },
+    { id: "34", subject: "EM-I", time: "10:30-11:20", room: "Classroom" },
+    { id: "35", subject: "BEE", time: "11:20-12:10", room: "Classroom" },
+    { id: "36", subject: "LPCC", time: "12:10-01:00", room: "Classroom" },
+    { id: "37", subject: "FC", time: "01:50-02:40", room: "Classroom" },
     {
-      id: "33",
-      subject: "E-Lab Activity / Sports / Yoga / Social Services",
-      time: "02:40-04:20",
-      room: "Community Services",
+      id: "38",
+      subject: "Club Activities",
+      time: "02:40-05:10",
+      room: "Various",
     },
   ],
 };
 
 export default function Dashboard() {
-  const [currentDate, setCurrentDate] = useState(new Date(2024, 10, 15));
-  const [selectedDate, setSelectedDate] = useState(new Date(2024, 10, 15));
+  const today = new Date();
+  const [currentDate, setCurrentDate] = useState(today);
+  const [selectedDate, setSelectedDate] = useState(today);
   const [holidays, setHolidays] = useState<Set<string>>(new Set());
+  const [userId] = useState(() => {
+    try {
+      const user = localStorage.getItem("user");
+      return user ? JSON.parse(user).email : "guest";
+    } catch {
+      return "guest";
+    }
+  });
+
   const [attendance, setAttendance] = useState<
     Record<string, Record<string, "present" | "absent">>
-  >({});
+  >(() => {
+    try {
+      const storageKey = `attendanceData_${userId}`;
+      const saved = localStorage.getItem(storageKey);
+      return saved ? JSON.parse(saved) : {};
+    } catch {
+      return {};
+    }
+  });
 
-  const getDaysInMonth = (date: Date) =>
-    new Date(date.getFullYear(), date.getMonth() + 1, 0).getDate();
+  useEffect(() => {
+    const loadAttendanceFromDatabase = async () => {
+      try {
+        const response = await fetch(`/api/attendance/get?userEmail=${userId}`);
+        if (response.ok) {
+          const result = await response.json();
+          if (result.data && result.data.rows) {
+            const attendanceData: Record<
+              string,
+              Record<string, "present" | "absent">
+            > = {};
+            result.data.rows.forEach(
+              (row: { date: string; class_id: string; status: string }) => {
+                if (!attendanceData[row.date]) {
+                  attendanceData[row.date] = {};
+                }
+                attendanceData[row.date][row.class_id] = row.status as
+                  | "present"
+                  | "absent";
+              },
+            );
+            setAttendance(attendanceData);
+          }
+        }
+      } catch (error) {
+        console.error("Failed to load attendance from database:", error);
+      }
+    };
 
-  const getFirstDayOfMonth = (date: Date) =>
-    new Date(date.getFullYear(), date.getMonth(), 1).getDay();
+    loadAttendanceFromDatabase();
+  }, [userId]);
+
+  useEffect(() => {
+    try {
+      const storageKey = `attendanceData_${userId}`;
+      localStorage.setItem(storageKey, JSON.stringify(attendance));
+    } catch {
+      console.error("Failed to save attendance data");
+    }
+  }, [attendance, userId]);
 
   const handlePreviousMonth = () => {
-    setCurrentDate(
-      new Date(currentDate.getFullYear(), currentDate.getMonth() - 1),
-    );
+    setCurrentDate(subMonths(currentDate, 1));
   };
 
   const handleNextMonth = () => {
-    setCurrentDate(
-      new Date(currentDate.getFullYear(), currentDate.getMonth() + 1),
-    );
+    setCurrentDate(addMonths(currentDate, 1));
+  };
+
+  const generateCalendarDays = (date: Date): (Date | null)[] => {
+    const year = date.getFullYear();
+    const month = date.getMonth();
+
+    const firstDay = new Date(year, month, 1);
+    const lastDay = new Date(year, month + 1, 0);
+    const daysInMonth = lastDay.getDate();
+    const startingDayOfWeek = firstDay.getDay();
+
+    const calendarDays: (Date | null)[] = [];
+
+    for (let i = 0; i < startingDayOfWeek; i++) {
+      calendarDays.push(null);
+    }
+
+    for (let day = 1; day <= daysInMonth; day++) {
+      calendarDays.push(new Date(year, month, day));
+    }
+
+    while (calendarDays.length % 7 !== 0) {
+      calendarDays.push(null);
+    }
+
+    return calendarDays;
   };
 
   const dateKey = (date: Date) =>
-    `${date.getFullYear()}-${date.getMonth()}-${date.getDate()}`;
+    `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, "0")}-${String(date.getDate()).padStart(2, "0")}`;
 
   const isHoliday = holidays.has(dateKey(selectedDate));
 
-  const daysInMonth = getDaysInMonth(currentDate);
-  const firstDay = getFirstDayOfMonth(currentDate);
-  const days: (number | null)[] = [];
-  for (let i = 0; i < firstDay; i++) days.push(null);
-  for (let i = 1; i <= daysInMonth; i++) days.push(i);
+  const calendarDays = generateCalendarDays(currentDate);
 
   // Get classes for selected date based on day of week
   const getClassesForDate = (date: Date): Class[] => {
@@ -187,7 +283,7 @@ export default function Dashboard() {
     };
   }, [attendance]);
 
-  const handleAttendanceChange = (
+  const handleAttendanceChange = async (
     classId: string,
     status: "present" | "absent",
   ) => {
@@ -198,6 +294,27 @@ export default function Dashboard() {
         [classId]: status,
       },
     }));
+
+    const selectedClass = mockClasses.find((c) => c.id === classId);
+    if (selectedClass) {
+      try {
+        await fetch("/api/attendance/save", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            userEmail: userId,
+            date: selectedDateKey,
+            classId,
+            subject: selectedClass.subject,
+            timeSlot: selectedClass.time,
+            room: selectedClass.room,
+            status,
+          }),
+        });
+      } catch (error) {
+        console.error("Failed to save attendance:", error);
+      }
+    }
   };
 
   const handleMarkFullDay = (status: "present" | "absent") => {
@@ -224,7 +341,26 @@ export default function Dashboard() {
     setHolidays(newHolidays);
   };
 
-  const handleUnmark = () => {
+  const handleUnmark = async () => {
+    const attendanceForDay = attendance[selectedDateKey];
+    if (attendanceForDay) {
+      for (const classId of Object.keys(attendanceForDay)) {
+        try {
+          await fetch("/api/attendance/delete", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({
+              userEmail: userId,
+              date: selectedDateKey,
+              classId,
+            }),
+          });
+        } catch (error) {
+          console.error("Failed to delete attendance:", error);
+        }
+      }
+    }
+
     setAttendance((prev) => {
       const newAttendance = { ...prev };
       delete newAttendance[selectedDateKey];
@@ -352,21 +488,15 @@ export default function Dashboard() {
                 </div>
 
                 <div className="grid grid-cols-7 gap-2">
-                  {days.map((day, i) => {
-                    if (day === null) {
+                  {calendarDays.map((date, i) => {
+                    if (date === null) {
                       return (
                         <div key={`empty-${i}`} className="aspect-square"></div>
                       );
                     }
 
-                    const date = new Date(
-                      currentDate.getFullYear(),
-                      currentDate.getMonth(),
-                      day,
-                    );
                     const dKey = dateKey(date);
-                    const isSelected =
-                      selectedDate.toDateString() === date.toDateString();
+                    const isSelected = isSameDay(selectedDate, date);
                     const hasAttendance = !!attendance[dKey];
                     const isHolidayDate = holidays.has(dKey);
                     const dayClasses = getClassesForDate(date);
@@ -374,7 +504,7 @@ export default function Dashboard() {
 
                     return (
                       <button
-                        key={day}
+                        key={`${date.getTime()}`}
                         onClick={() => setSelectedDate(date)}
                         className={`aspect-square rounded-lg flex items-center justify-center font-medium text-sm transition-all ${
                           isSelected
@@ -388,7 +518,7 @@ export default function Dashboard() {
                                   : "bg-slate-100 dark:bg-slate-700 text-slate-900 dark:text-white hover:bg-slate-200 dark:hover:bg-slate-600"
                         }`}
                       >
-                        {day}
+                        {date.getDate()}
                       </button>
                     );
                   })}
