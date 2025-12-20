@@ -161,6 +161,39 @@ export default function Dashboard() {
   });
 
   useEffect(() => {
+    const loadAttendanceFromDatabase = async () => {
+      try {
+        const response = await fetch(`/api/attendance/get?userEmail=${userId}`);
+        if (response.ok) {
+          const result = await response.json();
+          if (result.data && result.data.rows) {
+            const attendanceData: Record<string, Record<string, "present" | "absent">> = {};
+            result.data.rows.forEach(
+              (row: {
+                date: string;
+                class_id: string;
+                status: string;
+              }) => {
+                if (!attendanceData[row.date]) {
+                  attendanceData[row.date] = {};
+                }
+                attendanceData[row.date][row.class_id] = row.status as
+                  | "present"
+                  | "absent";
+              },
+            );
+            setAttendance(attendanceData);
+          }
+        }
+      } catch (error) {
+        console.error("Failed to load attendance from database:", error);
+      }
+    };
+
+    loadAttendanceFromDatabase();
+  }, [userId]);
+
+  useEffect(() => {
     try {
       const storageKey = `attendanceData_${userId}`;
       localStorage.setItem(storageKey, JSON.stringify(attendance));
