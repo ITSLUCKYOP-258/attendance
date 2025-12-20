@@ -27,8 +27,19 @@ import {
   Calendar,
   TrendingUp,
   AlertCircle,
+  Trash2,
 } from "lucide-react";
 import { Progress } from "@/components/ui/progress";
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogTrigger,
+} from "@/components/ui/alert-dialog";
 
 interface Class {
   id: string;
@@ -392,6 +403,36 @@ export default function Dashboard() {
     });
   };
 
+  const handleClearAllData = async () => {
+    try {
+      // Clear from database for all dates
+      for (const [dateKey, dateAttendance] of Object.entries(attendance)) {
+        for (const classId of Object.keys(dateAttendance)) {
+          try {
+            await fetch("/api/attendance/delete", {
+              method: "POST",
+              headers: { "Content-Type": "application/json" },
+              body: JSON.stringify({
+                userEmail: userId,
+                date: dateKey,
+                classId,
+              }),
+            });
+          } catch (error) {
+            console.error("Failed to delete attendance:", error);
+          }
+        }
+      }
+    } catch (error) {
+      console.error("Failed to clear data:", error);
+    }
+
+    // Clear from localStorage and state
+    const storageKey = `attendanceData_${userId}`;
+    localStorage.removeItem(storageKey);
+    setAttendance({});
+  };
+
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50 to-slate-100 dark:from-slate-950 dark:via-blue-950 dark:to-slate-900">
       <div className="absolute inset-0 overflow-hidden pointer-events-none">
@@ -402,13 +443,47 @@ export default function Dashboard() {
       <div className="relative max-w-7xl mx-auto p-6">
         {/* Header */}
         <div className="mb-8">
-          <div className="flex items-center gap-3 mb-2">
-            <div className="p-2 bg-primary rounded-lg">
-              <Calendar className="w-6 h-6 text-white" />
+          <div className="flex items-center justify-between gap-3 mb-2">
+            <div className="flex items-center gap-3">
+              <div className="p-2 bg-primary rounded-lg">
+                <Calendar className="w-6 h-6 text-white" />
+              </div>
+              <h1 className="text-4xl font-bold text-slate-900 dark:text-white">
+                Attendance Dashboard
+              </h1>
             </div>
-            <h1 className="text-4xl font-bold text-slate-900 dark:text-white">
-              Attendance Dashboard
-            </h1>
+            <AlertDialog>
+              <AlertDialogTrigger asChild>
+                <Button
+                  variant="destructive"
+                  size="sm"
+                  className="flex items-center gap-2"
+                >
+                  <Trash2 className="w-4 h-4" />
+                  Clear All Data
+                </Button>
+              </AlertDialogTrigger>
+              <AlertDialogContent>
+                <AlertDialogHeader>
+                  <AlertDialogTitle>
+                    Clear All Attendance Data?
+                  </AlertDialogTitle>
+                  <AlertDialogDescription>
+                    This will permanently delete all your entered attendance
+                    data. This action cannot be undone. Are you sure?
+                  </AlertDialogDescription>
+                </AlertDialogHeader>
+                <div className="flex gap-2 justify-end">
+                  <AlertDialogCancel>Cancel</AlertDialogCancel>
+                  <AlertDialogAction
+                    onClick={handleClearAllData}
+                    className="bg-destructive text-destructive-foreground hover:bg-destructive/90"
+                  >
+                    Clear All
+                  </AlertDialogAction>
+                </div>
+              </AlertDialogContent>
+            </AlertDialog>
           </div>
           <p className="text-slate-600 dark:text-slate-400">
             Track and manage your class attendance
