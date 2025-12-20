@@ -171,11 +171,7 @@ export default function Dashboard() {
 
   const isHoliday = holidays.has(dateKey(selectedDate));
 
-  const daysInMonth = getDaysInMonth(currentDate);
-  const firstDay = getFirstDayOfMonth(currentDate);
-  const days: (number | null)[] = [];
-  for (let i = 0; i < firstDay; i++) days.push(null);
-  for (let i = 1; i <= daysInMonth; i++) days.push(i);
+  const calendarDays = generateCalendarDays(currentDate);
 
   // Get classes for selected date based on day of week
   const getClassesForDate = (date: Date): Class[] => {
