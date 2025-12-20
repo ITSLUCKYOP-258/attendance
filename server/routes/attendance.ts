@@ -52,6 +52,14 @@ export const handleGetAttendance: RequestHandler = async (req, res) => {
       });
     }
 
+    if (!process.env.DATABASE_URL) {
+      // Return empty data when database is not configured
+      return res.json({
+        success: true,
+        data: { rows: [] },
+      });
+    }
+
     const result = await getAttendance(
       userEmail,
       date && typeof date === "string" ? date : undefined,
