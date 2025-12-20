@@ -151,16 +151,26 @@ export default function Dashboard() {
   };
 
   const generateCalendarDays = (date: Date): (Date | null)[] => {
-    const monthStart = startOfMonth(date);
-    const monthEnd = endOfMonth(date);
-    const calendarStart = startOfWeek(monthStart, { weekStartsOn: 0 });
+    const year = date.getFullYear();
+    const month = date.getMonth();
+
+    const firstDay = new Date(year, month, 1);
+    const lastDay = new Date(year, month + 1, 0);
+    const daysInMonth = lastDay.getDate();
+    const startingDayOfWeek = firstDay.getDay();
 
     const calendarDays: (Date | null)[] = [];
-    let current = new Date(calendarStart);
 
-    while (calendarDays.length < 42) {
-      calendarDays.push(isSameMonth(current, date) ? new Date(current) : null);
-      current = addDays(current, 1);
+    for (let i = 0; i < startingDayOfWeek; i++) {
+      calendarDays.push(null);
+    }
+
+    for (let day = 1; day <= daysInMonth; day++) {
+      calendarDays.push(new Date(year, month, day));
+    }
+
+    while (calendarDays.length % 7 !== 0) {
+      calendarDays.push(null);
     }
 
     return calendarDays;
