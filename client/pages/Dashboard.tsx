@@ -840,7 +840,9 @@ export default function Dashboard() {
                         className="w-full text-success border-success hover:bg-success/10 py-2 sm:py-2.5 text-xs sm:text-sm"
                       >
                         <Check className="w-3.5 h-3.5 sm:w-4 sm:h-4 mr-1 sm:mr-2" />
-                        <span className="hidden sm:inline">Mark Full Day Present</span>
+                        <span className="hidden sm:inline">
+                          Mark Full Day Present
+                        </span>
                         <span className="sm:hidden">All Present</span>
                       </Button>
                       <Button
@@ -850,7 +852,9 @@ export default function Dashboard() {
                         className="w-full text-error border-error hover:bg-error/10 py-2 sm:py-2.5 text-xs sm:text-sm"
                       >
                         <X className="w-3.5 h-3.5 sm:w-4 sm:h-4 mr-1 sm:mr-2" />
-                        <span className="hidden sm:inline">Mark Full Day Absent</span>
+                        <span className="hidden sm:inline">
+                          Mark Full Day Absent
+                        </span>
                         <span className="sm:hidden">All Absent</span>
                       </Button>
                     </>

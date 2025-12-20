@@ -127,7 +127,8 @@ export const handleGetSubjectWiseAttendance: RequestHandler = async (
     const subjectAttendance = Object.entries(subjectStats)
       .map(([subject, stats]) => ({
         subject,
-        percentage: stats.total > 0 ? Math.round((stats.present / stats.total) * 100) : 0,
+        percentage:
+          stats.total > 0 ? Math.round((stats.present / stats.total) * 100) : 0,
         total: stats.total,
         present: stats.present,
       }))

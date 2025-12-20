@@ -119,7 +119,9 @@ export default function Analytics() {
                 <p className="text-xs sm:text-sm text-slate-600 dark:text-slate-400">
                   Current Percentage
                 </p>
-                <p className="text-2xl sm:text-3xl font-bold text-primary">87.5%</p>
+                <p className="text-2xl sm:text-3xl font-bold text-primary">
+                  87.5%
+                </p>
                 <p className="text-xs text-success">↑ 2.5% from last month</p>
               </div>
             </CardContent>
@@ -131,7 +133,9 @@ export default function Analytics() {
                 <p className="text-xs sm:text-sm text-slate-600 dark:text-slate-400">
                   Classes Attended
                 </p>
-                <p className="text-2xl sm:text-3xl font-bold text-success">156</p>
+                <p className="text-2xl sm:text-3xl font-bold text-success">
+                  156
+                </p>
                 <p className="text-xs text-slate-600 dark:text-slate-400">
                   Out of 178 total
                 </p>
@@ -145,7 +149,9 @@ export default function Analytics() {
                 <p className="text-xs sm:text-sm text-slate-600 dark:text-slate-400">
                   Target Status
                 </p>
-                <p className="text-2xl sm:text-3xl font-bold text-success">On Track</p>
+                <p className="text-2xl sm:text-3xl font-bold text-success">
+                  On Track
+                </p>
                 <p className="text-xs text-slate-600 dark:text-slate-400">
                   12.5% above threshold
                 </p>
@@ -159,7 +165,9 @@ export default function Analytics() {
                 <p className="text-xs sm:text-sm text-slate-600 dark:text-slate-400">
                   Attendance Streak
                 </p>
-                <p className="text-2xl sm:text-3xl font-bold text-primary">8 days</p>
+                <p className="text-2xl sm:text-3xl font-bold text-primary">
+                  8 days
+                </p>
                 <p className="text-xs text-slate-600 dark:text-slate-400">
                   Keep it up!
                 </p>
@@ -301,7 +309,9 @@ export default function Analytics() {
           <Card className="backdrop-blur-sm bg-white/95 dark:bg-slate-800/95 border-slate-200 dark:border-slate-700">
             <CardHeader>
               <CardTitle className="text-lg">Weekly Class Attendance</CardTitle>
-              <CardDescription className="text-xs sm:text-sm">Classes attended this month</CardDescription>
+              <CardDescription className="text-xs sm:text-sm">
+                Classes attended this month
+              </CardDescription>
             </CardHeader>
             <CardContent>
               <ResponsiveContainer width="100%" height={250}>
@@ -373,30 +383,33 @@ export default function Analytics() {
                 </div>
               </div>
 
-              {subjectAttendance.length > 0 && subjectAttendance.some((s) => s.percentage < 80) && (
-                <div className="p-4 bg-warning/10 border border-warning/30 rounded-lg">
-                  <div className="flex gap-3">
-                    <AlertCircle className="w-5 h-5 text-warning flex-shrink-0 mt-0.5" />
-                    <div>
-                      <p className="font-semibold text-slate-900 dark:text-white">
-                        Watch{" "}
-                        {
-                          subjectAttendance.filter((s) => s.percentage < 80)[0]
-                            ?.subject
-                        }
-                      </p>
-                      <p className="text-sm text-slate-600 dark:text-slate-400">
-                        Attendance at{" "}
-                        {
-                          subjectAttendance.filter((s) => s.percentage < 80)[0]
-                            ?.percentage
-                        }
-                        % in this subject
-                      </p>
+              {subjectAttendance.length > 0 &&
+                subjectAttendance.some((s) => s.percentage < 80) && (
+                  <div className="p-4 bg-warning/10 border border-warning/30 rounded-lg">
+                    <div className="flex gap-3">
+                      <AlertCircle className="w-5 h-5 text-warning flex-shrink-0 mt-0.5" />
+                      <div>
+                        <p className="font-semibold text-slate-900 dark:text-white">
+                          Watch{" "}
+                          {
+                            subjectAttendance.filter(
+                              (s) => s.percentage < 80,
+                            )[0]?.subject
+                          }
+                        </p>
+                        <p className="text-sm text-slate-600 dark:text-slate-400">
+                          Attendance at{" "}
+                          {
+                            subjectAttendance.filter(
+                              (s) => s.percentage < 80,
+                            )[0]?.percentage
+                          }
+                          % in this subject
+                        </p>
+                      </div>
                     </div>
                   </div>
-                </div>
-              )}
+                )}
 
               <div className="p-4 bg-accent/10 border border-accent/30 rounded-lg">
                 <div className="flex gap-3">
