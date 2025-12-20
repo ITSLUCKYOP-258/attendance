@@ -372,19 +372,30 @@ export default function Analytics() {
                 </div>
               </div>
 
-              <div className="p-4 bg-warning/10 border border-warning/30 rounded-lg">
-                <div className="flex gap-3">
-                  <AlertCircle className="w-5 h-5 text-warning flex-shrink-0 mt-0.5" />
-                  <div>
-                    <p className="font-semibold text-slate-900 dark:text-white">
-                      Watch Database Systems
-                    </p>
-                    <p className="text-sm text-slate-600 dark:text-slate-400">
-                      Attendance at 78% in this subject
-                    </p>
+              {subjectAttendance.length > 0 && subjectAttendance.some((s) => s.percentage < 80) && (
+                <div className="p-4 bg-warning/10 border border-warning/30 rounded-lg">
+                  <div className="flex gap-3">
+                    <AlertCircle className="w-5 h-5 text-warning flex-shrink-0 mt-0.5" />
+                    <div>
+                      <p className="font-semibold text-slate-900 dark:text-white">
+                        Watch{" "}
+                        {
+                          subjectAttendance.filter((s) => s.percentage < 80)[0]
+                            ?.subject
+                        }
+                      </p>
+                      <p className="text-sm text-slate-600 dark:text-slate-400">
+                        Attendance at{" "}
+                        {
+                          subjectAttendance.filter((s) => s.percentage < 80)[0]
+                            ?.percentage
+                        }
+                        % in this subject
+                      </p>
+                    </div>
                   </div>
                 </div>
-              </div>
+              )}
 
               <div className="p-4 bg-accent/10 border border-accent/30 rounded-lg">
                 <div className="flex gap-3">
