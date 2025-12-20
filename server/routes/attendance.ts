@@ -122,6 +122,13 @@ export const handleGetSubjectWiseAttendance: RequestHandler = async (
       });
     }
 
+    if (!process.env.DATABASE_URL) {
+      return res.json({
+        success: true,
+        data: [],
+      });
+    }
+
     const result = await getAttendance(userEmail);
     const records = result.rows as Array<{
       subject: string;
