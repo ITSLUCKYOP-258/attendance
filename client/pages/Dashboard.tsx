@@ -318,7 +318,7 @@ export default function Dashboard() {
     }
   };
 
-  const handleMarkFullDay = (status: "present" | "absent") => {
+  const handleMarkFullDay = async (status: "present" | "absent") => {
     const newDateAttendance: Record<string, "present" | "absent"> = {};
     mockClasses.forEach((c) => {
       newDateAttendance[c.id] = status;
@@ -327,6 +327,27 @@ export default function Dashboard() {
       ...prev,
       [selectedDateKey]: newDateAttendance,
     }));
+
+    // Save all classes for this day to database
+    for (const classData of mockClasses) {
+      try {
+        await fetch("/api/attendance/save", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            userEmail: userId,
+            date: selectedDateKey,
+            classId: classData.id,
+            subject: classData.subject,
+            timeSlot: classData.time,
+            room: classData.room,
+            status,
+          }),
+        });
+      } catch (error) {
+        console.error("Failed to save attendance:", error);
+      }
+    }
   };
 
   // Show classes only if it's a weekday with scheduled classes and not a holiday
