@@ -156,12 +156,11 @@ export default function Dashboard() {
     const calendarStart = startOfWeek(monthStart, { weekStartsOn: 0 });
 
     const calendarDays: (Date | null)[] = [];
-    let current = calendarStart;
+    let current = new Date(calendarStart);
 
-    while (current <= monthEnd || calendarDays.length % 7 !== 0) {
+    while (calendarDays.length < 42) {
       calendarDays.push(isSameMonth(current, date) ? new Date(current) : null);
       current = addDays(current, 1);
-      if (current > addDays(monthEnd, 6)) break;
     }
 
     return calendarDays;
