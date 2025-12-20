@@ -192,11 +192,13 @@ export default function Dashboard() {
                   | "absent";
               },
             );
-            setAttendance(attendanceData);
+            // Merge with existing localStorage data instead of replacing
+            setAttendance((prev) => ({ ...prev, ...attendanceData }));
           }
         }
       } catch (error) {
         console.error("Failed to load attendance from database:", error);
+        // Data will remain from localStorage if database fails
       }
     };
 
