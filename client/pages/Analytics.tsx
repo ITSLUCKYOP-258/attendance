@@ -95,43 +95,43 @@ export default function Analytics() {
         <div className="absolute bottom-0 left-0 w-96 h-96 bg-cyan-200 dark:bg-cyan-900 rounded-full blur-3xl opacity-10"></div>
       </div>
 
-      <div className="relative max-w-7xl mx-auto p-6">
+      <div className="relative max-w-7xl mx-auto px-4 sm:px-6 py-4 sm:py-6">
         {/* Header */}
-        <div className="mb-8">
-          <div className="flex items-center gap-3 mb-2">
+        <div className="mb-6 sm:mb-8">
+          <div className="flex items-center gap-2 sm:gap-3 mb-2">
             <div className="p-2 bg-primary rounded-lg">
-              <TrendingUp className="w-6 h-6 text-white" />
+              <TrendingUp className="w-5 h-5 sm:w-6 sm:h-6 text-white" />
             </div>
-            <h1 className="text-4xl font-bold text-slate-900 dark:text-white">
+            <h1 className="text-2xl sm:text-4xl font-bold text-slate-900 dark:text-white">
               Analytics & Reports
             </h1>
           </div>
-          <p className="text-slate-600 dark:text-slate-400">
+          <p className="text-xs sm:text-sm text-slate-600 dark:text-slate-400">
             Track your attendance trends and performance metrics
           </p>
         </div>
 
         {/* Key Metrics */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4 mb-6 sm:mb-8">
           <Card className="backdrop-blur-sm bg-white/95 dark:bg-slate-800/95 border-slate-200 dark:border-slate-700">
-            <CardContent className="pt-6">
+            <CardContent className="pt-4 sm:pt-6">
               <div className="space-y-2">
-                <p className="text-sm text-slate-600 dark:text-slate-400">
+                <p className="text-xs sm:text-sm text-slate-600 dark:text-slate-400">
                   Current Percentage
                 </p>
-                <p className="text-3xl font-bold text-primary">87.5%</p>
+                <p className="text-2xl sm:text-3xl font-bold text-primary">87.5%</p>
                 <p className="text-xs text-success">↑ 2.5% from last month</p>
               </div>
             </CardContent>
           </Card>
 
           <Card className="backdrop-blur-sm bg-white/95 dark:bg-slate-800/95 border-slate-200 dark:border-slate-700">
-            <CardContent className="pt-6">
+            <CardContent className="pt-4 sm:pt-6">
               <div className="space-y-2">
-                <p className="text-sm text-slate-600 dark:text-slate-400">
+                <p className="text-xs sm:text-sm text-slate-600 dark:text-slate-400">
                   Classes Attended
                 </p>
-                <p className="text-3xl font-bold text-success">156</p>
+                <p className="text-2xl sm:text-3xl font-bold text-success">156</p>
                 <p className="text-xs text-slate-600 dark:text-slate-400">
                   Out of 178 total
                 </p>
@@ -140,12 +140,12 @@ export default function Analytics() {
           </Card>
 
           <Card className="backdrop-blur-sm bg-white/95 dark:bg-slate-800/95 border-slate-200 dark:border-slate-700">
-            <CardContent className="pt-6">
+            <CardContent className="pt-4 sm:pt-6">
               <div className="space-y-2">
-                <p className="text-sm text-slate-600 dark:text-slate-400">
+                <p className="text-xs sm:text-sm text-slate-600 dark:text-slate-400">
                   Target Status
                 </p>
-                <p className="text-3xl font-bold text-success">On Track</p>
+                <p className="text-2xl sm:text-3xl font-bold text-success">On Track</p>
                 <p className="text-xs text-slate-600 dark:text-slate-400">
                   12.5% above threshold
                 </p>
@@ -154,12 +154,12 @@ export default function Analytics() {
           </Card>
 
           <Card className="backdrop-blur-sm bg-white/95 dark:bg-slate-800/95 border-slate-200 dark:border-slate-700">
-            <CardContent className="pt-6">
+            <CardContent className="pt-4 sm:pt-6">
               <div className="space-y-2">
-                <p className="text-sm text-slate-600 dark:text-slate-400">
+                <p className="text-xs sm:text-sm text-slate-600 dark:text-slate-400">
                   Attendance Streak
                 </p>
-                <p className="text-3xl font-bold text-primary">8 days</p>
+                <p className="text-2xl sm:text-3xl font-bold text-primary">8 days</p>
                 <p className="text-xs text-slate-600 dark:text-slate-400">
                   Keep it up!
                 </p>
@@ -169,7 +169,7 @@ export default function Analytics() {
         </div>
 
         {/* Charts Grid */}
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-6">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 sm:gap-6 mb-6">
           {/* Attendance Trend */}
           <Card className="backdrop-blur-sm bg-white/95 dark:bg-slate-800/95 border-slate-200 dark:border-slate-700">
             <CardHeader>
