@@ -586,6 +586,88 @@ export default function Dashboard() {
               </Card>
             </div>
 
+            {/* Date Range Filter */}
+            <Card className="backdrop-blur-sm bg-white/95 dark:bg-slate-800/95 border-slate-200 dark:border-slate-700">
+              <CardHeader>
+                <CardTitle>Filter by Date Range</CardTitle>
+                <CardDescription>
+                  Select a date range to see attendance for that period
+                </CardDescription>
+              </CardHeader>
+              <CardContent className="space-y-4">
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                  <div className="space-y-2">
+                    <label className="text-sm font-medium text-slate-900 dark:text-white">
+                      Start Date
+                    </label>
+                    <input
+                      type="date"
+                      value={filterStartDate}
+                      onChange={(e) => setFilterStartDate(e.target.value)}
+                      className="w-full px-3 py-2 border border-slate-300 dark:border-slate-600 rounded-lg bg-white dark:bg-slate-700 text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-primary"
+                    />
+                  </div>
+                  <div className="space-y-2">
+                    <label className="text-sm font-medium text-slate-900 dark:text-white">
+                      End Date
+                    </label>
+                    <input
+                      type="date"
+                      value={filterEndDate}
+                      onChange={(e) => setFilterEndDate(e.target.value)}
+                      className="w-full px-3 py-2 border border-slate-300 dark:border-slate-600 rounded-lg bg-white dark:bg-slate-700 text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-primary"
+                    />
+                  </div>
+                </div>
+
+                {filteredAttendanceStats && (
+                  <div className="mt-6 pt-4 border-t border-slate-200 dark:border-slate-600">
+                    <p className="text-sm text-slate-600 dark:text-slate-400 mb-4">
+                      Attendance for selected period:
+                    </p>
+                    <div className="grid grid-cols-3 gap-3">
+                      <div className="text-center">
+                        <div className="text-2xl font-bold text-primary mb-1">
+                          {filteredAttendanceStats.percentage}%
+                        </div>
+                        <p className="text-xs text-slate-600 dark:text-slate-400">
+                          Percentage
+                        </p>
+                      </div>
+                      <div className="text-center">
+                        <div className="text-2xl font-bold text-success mb-1">
+                          {filteredAttendanceStats.present}
+                        </div>
+                        <p className="text-xs text-slate-600 dark:text-slate-400">
+                          Present
+                        </p>
+                      </div>
+                      <div className="text-center">
+                        <div className="text-2xl font-bold text-error mb-1">
+                          {filteredAttendanceStats.absent}
+                        </div>
+                        <p className="text-xs text-slate-600 dark:text-slate-400">
+                          Absent
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+                )}
+
+                <Button
+                  onClick={() => {
+                    setFilterStartDate("");
+                    setFilterEndDate("");
+                  }}
+                  variant="outline"
+                  size="sm"
+                  className="w-full mt-4"
+                >
+                  Clear Filter
+                </Button>
+              </CardContent>
+            </Card>
+
             {/* Calendar */}
             <Card className="backdrop-blur-sm bg-white/95 dark:bg-slate-800/95 border-slate-200 dark:border-slate-700">
               <CardHeader>
