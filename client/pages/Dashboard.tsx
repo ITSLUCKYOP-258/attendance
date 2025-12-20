@@ -150,6 +150,9 @@ export default function Dashboard() {
     }));
   };
 
+  // Show classes only if it's a weekday with scheduled classes and not a holiday
+  const shouldShowClasses = mockClasses.length > 0 && !isHoliday;
+
   const handleToggleHoliday = () => {
     const newHolidays = new Set(holidays);
     if (newHolidays.has(selectedDateKey)) {
