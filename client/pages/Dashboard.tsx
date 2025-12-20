@@ -299,6 +299,39 @@ export default function Dashboard() {
     };
   }, [attendance]);
 
+  const filteredAttendanceStats = useMemo(() => {
+    if (!filterStartDate || !filterEndDate) {
+      return null;
+    }
+
+    const startDate = new Date(filterStartDate);
+    const endDate = new Date(filterEndDate);
+
+    let present = 0,
+      absent = 0,
+      total = 0;
+
+    Object.entries(attendance).forEach(([dateStr, dateAttendance]) => {
+      const [year, month, day] = dateStr.split("-").map(Number);
+      const recordDate = new Date(year, month - 1, day);
+
+      if (recordDate >= startDate && recordDate <= endDate) {
+        Object.values(dateAttendance).forEach((status) => {
+          if (status === "present") present++;
+          if (status === "absent") absent++;
+          total++;
+        });
+      }
+    });
+
+    return {
+      present,
+      absent,
+      total,
+      percentage: total > 0 ? Math.round((present / total) * 100) : 0,
+    };
+  }, [attendance, filterStartDate, filterEndDate]);
+
   const handleAttendanceChange = async (
     classId: string,
     status: "present" | "absent",
