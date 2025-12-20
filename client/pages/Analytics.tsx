@@ -300,11 +300,11 @@ export default function Analytics() {
           {/* Weekly Classes */}
           <Card className="backdrop-blur-sm bg-white/95 dark:bg-slate-800/95 border-slate-200 dark:border-slate-700">
             <CardHeader>
-              <CardTitle>Weekly Class Attendance</CardTitle>
-              <CardDescription>Classes attended this month</CardDescription>
+              <CardTitle className="text-lg">Weekly Class Attendance</CardTitle>
+              <CardDescription className="text-xs sm:text-sm">Classes attended this month</CardDescription>
             </CardHeader>
             <CardContent>
-              <ResponsiveContainer width="100%" height={300}>
+              <ResponsiveContainer width="100%" height={250}>
                 <BarChart data={weeklyData}>
                   <CartesianGrid
                     strokeDasharray="3 3"
