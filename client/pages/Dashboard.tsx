@@ -610,6 +610,7 @@ export default function Dashboard() {
                     const isHolidayDate = holidays.has(dKey);
                     const dayClasses = getClassesForDate(date);
                     const hasClasses = dayClasses.length > 0;
+                    const fullyAbsent = isFullyAbsent(date);
 
                     return (
                       <button
@@ -618,13 +619,15 @@ export default function Dashboard() {
                         className={`aspect-square rounded-lg flex items-center justify-center font-medium text-sm transition-all ${
                           isSelected
                             ? "bg-primary text-white ring-2 ring-primary/50"
-                            : isHolidayDate
-                              ? "bg-warning/20 text-warning-foreground border border-warning/30 hover:bg-warning/30"
-                              : hasAttendance
-                                ? "bg-success/20 text-success border border-success/30 hover:bg-success/30"
-                                : hasClasses
-                                  ? "bg-blue-50 dark:bg-blue-900/20 text-blue-700 dark:text-blue-300 border border-blue-200 dark:border-blue-700 hover:bg-blue-100 dark:hover:bg-blue-900/30"
-                                  : "bg-slate-100 dark:bg-slate-700 text-slate-900 dark:text-white hover:bg-slate-200 dark:hover:bg-slate-600"
+                            : fullyAbsent
+                              ? "bg-destructive/20 text-destructive border border-destructive/30 hover:bg-destructive/30"
+                              : isHolidayDate
+                                ? "bg-warning/20 text-warning-foreground border border-warning/30 hover:bg-warning/30"
+                                : hasAttendance
+                                  ? "bg-success/20 text-success border border-success/30 hover:bg-success/30"
+                                  : hasClasses
+                                    ? "bg-blue-50 dark:bg-blue-900/20 text-blue-700 dark:text-blue-300 border border-blue-200 dark:border-blue-700 hover:bg-blue-100 dark:hover:bg-blue-900/30"
+                                    : "bg-slate-100 dark:bg-slate-700 text-slate-900 dark:text-white hover:bg-slate-200 dark:hover:bg-slate-600"
                         }`}
                       >
                         {date.getDate()}
