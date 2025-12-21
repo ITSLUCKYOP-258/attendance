@@ -8,12 +8,14 @@
   external_node_modules = ["express", "pg", "cors"]
   node_bundler = "esbuild"
 
+# API routes
 [[redirects]]
   from = "/api/*"
   to = "/.netlify/functions/api/:splat"
   status = 200
+  force = true
 
-# SPA catch-all - serve index.html for all routes except /api and static files
+# SPA routing - all other routes go to index.html
 [[redirects]]
   from = "/*"
   to = "/index.html"
