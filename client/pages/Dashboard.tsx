@@ -80,12 +80,6 @@ const TIMETABLE_BY_DAY: Record<number, Class[]> = {
     { id: "4", subject: "FC", time: "01:50-02:40", room: "Classroom" },
     { id: "5", subject: "EM-I", time: "02:40-03:30", room: "Classroom" },
     { id: "6", subject: "ES", time: "03:30-04:20", room: "Classroom" },
-    {
-      id: "7",
-      subject: "Value Education",
-      time: "04:20-05:10",
-      room: "Classroom",
-    },
   ],
   2: [
     // Tuesday
@@ -99,7 +93,6 @@ const TIMETABLE_BY_DAY: Record<number, Class[]> = {
     { id: "10", subject: "FC", time: "01:50-02:40", room: "Classroom" },
     { id: "11", subject: "ES", time: "02:40-03:30", room: "Classroom" },
     { id: "12", subject: "IKS", time: "03:30-04:20", room: "Classroom" },
-    { id: "13", subject: "Library", time: "04:20-05:10", room: "Library" },
   ],
   3: [
     // Wednesday
@@ -119,7 +112,6 @@ const TIMETABLE_BY_DAY: Record<number, Class[]> = {
     { id: "24", subject: "EM-I", time: "01:50-02:40", room: "Classroom" },
     { id: "25", subject: "LPCC", time: "02:40-03:30", room: "Classroom" },
     { id: "26", subject: "ES", time: "03:30-04:20", room: "Classroom" },
-    { id: "27", subject: "Library", time: "04:20-05:10", room: "Library" },
   ],
   5: [
     // Friday
@@ -133,12 +125,6 @@ const TIMETABLE_BY_DAY: Record<number, Class[]> = {
       room: "Lab",
     },
     { id: "32", subject: "LPCC", time: "03:30-04:20", room: "Classroom" },
-    {
-      id: "33",
-      subject: "Value Education",
-      time: "04:20-05:10",
-      room: "Classroom",
-    },
   ],
   6: [
     // Saturday
@@ -146,12 +132,6 @@ const TIMETABLE_BY_DAY: Record<number, Class[]> = {
     { id: "35", subject: "BEE", time: "11:20-12:10", room: "Classroom" },
     { id: "36", subject: "LPCC", time: "12:10-01:00", room: "Classroom" },
     { id: "37", subject: "FC", time: "01:50-02:40", room: "Classroom" },
-    {
-      id: "38",
-      subject: "Club Activities",
-      time: "02:40-05:10",
-      room: "Various",
-    },
   ],
 };
 
