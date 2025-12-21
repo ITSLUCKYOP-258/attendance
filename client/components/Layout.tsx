@@ -40,9 +40,7 @@ export default function Layout() {
     }
   };
 
-  if (!user) return null;
-
-  const isAdmin = user.role === "admin";
+  const isAdmin = false;
   const isMobileOrTablet = window.innerWidth < 1024;
 
   const navigationItems = [
