@@ -63,7 +63,7 @@ export default function Register() {
       await createUserWithEmailAndPassword(
         auth,
         formData.email,
-        formData.password
+        formData.password,
       );
       toast({
         title: "Success",
