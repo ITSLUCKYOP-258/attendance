@@ -3,6 +3,14 @@ import { saveAttendance, getAttendance, deleteAttendance } from "../db";
 
 export const handleSaveAttendance: RequestHandler = async (req, res) => {
   try {
+    if (!process.env.DATABASE_URL) {
+      return res.status(503).json({
+        error: "Database service unavailable",
+        details:
+          "DATABASE_URL environment variable is not configured. Please configure it in your Netlify environment variables.",
+      });
+    }
+
     const { userEmail, date, classId, subject, timeSlot, room, status } =
       req.body;
 
@@ -45,6 +53,14 @@ export const handleGetAttendance: RequestHandler = async (req, res) => {
       });
     }
 
+    if (!process.env.DATABASE_URL) {
+      // Return empty data when database is not configured
+      return res.json({
+        success: true,
+        data: { rows: [] },
+      });
+    }
+
     const result = await getAttendance(
       userEmail,
       date && typeof date === "string" ? date : undefined,
@@ -64,6 +80,13 @@ export const handleGetAttendance: RequestHandler = async (req, res) => {
 
 export const handleDeleteAttendance: RequestHandler = async (req, res) => {
   try {
+    if (!process.env.DATABASE_URL) {
+      return res.status(503).json({
+        error: "Database service unavailable",
+        details: "DATABASE_URL environment variable is not configured.",
+      });
+    }
+
     const { userEmail, date, classId } = req.body;
 
     if (!userEmail || !date || !classId) {
@@ -97,6 +120,13 @@ export const handleGetSubjectWiseAttendance: RequestHandler = async (
     if (!userEmail || typeof userEmail !== "string") {
       return res.status(400).json({
         error: "Missing required parameter: userEmail",
+      });
+    }
+
+    if (!process.env.DATABASE_URL) {
+      return res.json({
+        success: true,
+        data: [],
       });
     }
 

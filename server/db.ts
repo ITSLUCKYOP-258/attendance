@@ -1,22 +1,31 @@
 import pg from "pg";
 const { Pool } = pg;
 
-if (!process.env.DATABASE_URL) {
-  console.warn(
-    "DATABASE_URL environment variable is not set. Database operations will fail.",
-  );
-}
+let pool: pg.Pool | null = null;
+let initializationAttempted = false;
 
-const pool = new Pool({
-  connectionString: process.env.DATABASE_URL || "",
-  ssl: {
-    rejectUnauthorized: false,
-  },
-});
+function getPool(): pg.Pool {
+  if (!pool) {
+    if (!process.env.DATABASE_URL) {
+      throw new Error(
+        "DATABASE_URL environment variable is not set. Please configure it in your Netlify environment variables.",
+      );
+    }
+
+    pool = new Pool({
+      connectionString: process.env.DATABASE_URL,
+      ssl: {
+        rejectUnauthorized: false,
+      },
+    });
+  }
+  return pool;
+}
 
 async function query(sql: string, params: any[] = []) {
   try {
-    const result = await pool.query(sql, params);
+    const dbPool = getPool();
+    const result = await dbPool.query(sql, params);
     return { rows: result.rows };
   } catch (error) {
     console.error("Database query error:", error);
@@ -25,6 +34,19 @@ async function query(sql: string, params: any[] = []) {
 }
 
 export async function initializeDatabase() {
+  if (initializationAttempted) {
+    return;
+  }
+
+  initializationAttempted = true;
+
+  if (!process.env.DATABASE_URL) {
+    console.warn(
+      "DATABASE_URL not configured. Skipping database initialization. Configure it in Netlify environment variables.",
+    );
+    return;
+  }
+
   try {
     await query(`
       CREATE TABLE IF NOT EXISTS users (
