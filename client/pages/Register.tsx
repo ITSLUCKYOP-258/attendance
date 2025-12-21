@@ -37,6 +37,14 @@ export default function Register() {
     e.preventDefault();
 
     if (step === "credentials") {
+      if (formData.password.length < 6) {
+        toast({
+          title: "Error",
+          description: "Password must be at least 6 characters long",
+          variant: "destructive",
+        });
+        return;
+      }
       if (formData.password !== formData.confirmPassword) {
         toast({
           title: "Error",
