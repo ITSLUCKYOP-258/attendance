@@ -4,7 +4,6 @@
   publish = "dist/spa"
   environment = { NODE_ENV = "production" }
 
-
 [functions]
   external_node_modules = ["express", "pg", "cors"]
   node_bundler = "esbuild"
@@ -15,7 +14,9 @@
   status = 200
   force = true
 
+# SPA routing - redirect all non-file requests to index.html
 [[redirects]]
   from = "/*"
   to = "/index.html"
   status = 200
+  conditions = { NOT = [{ status = 404 }] }
