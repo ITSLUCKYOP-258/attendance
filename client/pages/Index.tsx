@@ -12,17 +12,17 @@ import {
   ArrowRight,
   CheckCircle,
 } from "lucide-react";
+import { useAuth } from "@/context/AuthContext";
 
 export default function Index() {
   const navigate = useNavigate();
+  const { user, isLoading } = useAuth();
 
   useEffect(() => {
-    // Check if user is already logged in
-    const userStr = localStorage.getItem("user");
-    if (userStr) {
+    if (!isLoading && user) {
       navigate("/dashboard");
     }
-  }, [navigate]);
+  }, [user, isLoading, navigate]);
 
   const features = [
     {
