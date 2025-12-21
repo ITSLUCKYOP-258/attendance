@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Link } from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import {
@@ -10,6 +10,9 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { Calendar, ArrowLeft, ArrowRight } from "lucide-react";
+import { createUserWithEmailAndPassword } from "firebase/auth";
+import { auth } from "@/lib/firebase";
+import { useToast } from "@/hooks/use-toast";
 
 export default function Register() {
   const [step, setStep] = useState<"credentials" | "profile">("credentials");
@@ -23,6 +26,8 @@ export default function Register() {
     semester: "1",
   });
   const [isLoading, setIsLoading] = useState(false);
+  const navigate = useNavigate();
+  const { toast } = useToast();
 
   const handleInputChange = (field: string, value: string) => {
     setFormData((prev) => ({ ...prev, [field]: value }));
@@ -33,7 +38,11 @@ export default function Register() {
 
     if (step === "credentials") {
       if (formData.password !== formData.confirmPassword) {
-        alert("Passwords do not match!");
+        toast({
+          title: "Error",
+          description: "Passwords do not match!",
+          variant: "destructive",
+        });
         return;
       }
       setStep("profile");
@@ -41,21 +50,27 @@ export default function Register() {
     }
 
     setIsLoading(true);
-    // Simulate registration - in real app, call API
-    setTimeout(() => {
-      localStorage.setItem(
-        "user",
-        JSON.stringify({
-          email: formData.email,
-          fullName: formData.fullName,
-          rollNumber: formData.rollNumber,
-          branch: formData.branch,
-          semester: formData.semester,
-          role: "student",
-        }),
+
+    try {
+      await createUserWithEmailAndPassword(
+        auth,
+        formData.email,
+        formData.password
       );
-      window.location.href = "/dashboard";
-    }, 500);
+      toast({
+        title: "Success",
+        description: "Account created successfully",
+      });
+      navigate("/dashboard");
+    } catch (error: any) {
+      toast({
+        title: "Error",
+        description: error.message,
+        variant: "destructive",
+      });
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   return (
