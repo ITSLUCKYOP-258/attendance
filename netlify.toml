@@ -12,11 +12,9 @@
   from = "/api/*"
   to = "/.netlify/functions/api/:splat"
   status = 200
-  force = true
 
-# SPA routing - redirect all non-file requests to index.html
+# SPA catch-all - serve index.html for all routes except /api and static files
 [[redirects]]
   from = "/*"
   to = "/index.html"
   status = 200
-  conditions = { NOT = [{ status = 404 }] }
