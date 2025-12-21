@@ -106,7 +106,7 @@ export default function Layout() {
           <div className="flex items-center gap-4">
             <div className="hidden md:block text-right">
               <p className="text-sm font-medium text-slate-900 dark:text-white">
-                {user.fullName || user.email}
+                {user?.email || "User"}
               </p>
               <p className="text-xs text-slate-600 dark:text-slate-400">
                 {isAdmin ? "Administrator" : "Student"}
